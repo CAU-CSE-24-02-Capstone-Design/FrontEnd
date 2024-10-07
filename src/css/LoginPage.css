@@ -1,0 +1,67 @@
+.login-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    text-align: center;
+    padding: 10px;
+    margin: 0;
+}
+
+.login-form {
+    margin-bottom: 10px; /* 간격을 줄입니다. */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.login-input {
+    display: block;
+    margin: 5px; /* 간격을 줄입니다. */
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    width: 250px;
+}
+
+.login-button, .sign-up-button {
+    padding: 10px 20px;
+    font-size: 18px;
+    border-radius: 5px;
+    cursor: pointer;
+    border: none;
+    margin: 5px; /* 간격을 줄입니다. */
+}
+
+.login-button {
+    background-color: #007bff;
+    color: white;
+}
+
+.sign-up-button {
+    background-color: #007bff;
+    color: white;
+}
+
+.social-login-buttons {
+    display: flex;
+    flex-direction: column; /* 세로로 배치 */
+    align-items: center;
+    gap: 0; /* 이미지 간의 간격 제거 */
+    padding: 0; /* 부모 요소의 여백 제거 */
+}
+
+.social-icon {
+    width: 200px; /* 이미지의 가로 크기 */
+    height: auto; /* 이미지의 세로 크기를 자동으로 조정 */
+    cursor: pointer;
+    margin: 10px; /* 이미지와 이미지 사이의 간격 제거 */
+}
+
+.social-icon img {
+    width: 100%; /* 부모 요소의 가로 크기에 맞게 이미지 크기 조정 */
+    height: auto; /* 이미지의 세로 크기를 자동으로 조정 */
+    display: block; /* 이미지 아래 여백 제거 */
+}

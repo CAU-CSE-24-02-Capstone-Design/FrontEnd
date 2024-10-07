@@ -1,0 +1,83 @@
+/* Ensure full height for the main container */
+.App {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden; /* Prevent scrolling */
+}
+
+.layout {
+  display: flex;
+  flex: 1; /* Take up the remaining space */
+  overflow: hidden; /* Prevent scrolling */
+}
+
+.sidebar {
+  width: 200px;
+  background-color: #f4f4f4;
+  padding: 20px;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  margin-bottom: 10px;
+  color: #000;
+  text-decoration: none;
+  border-radius: 4px;
+  transition: box-shadow 0.2s ease;
+}
+
+.sidebar a:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.main-content {
+  height: 100vh;
+  flex: 1;
+  padding: 20px;
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  overflow: hidden; /* Prevent scrolling */
+}
+
+.map-container {
+  width: 1500px; /* Set the desired width for the map container */
+  height: 800px; /* Set the desired height for the map container */
+  position: relative; /* Ensure positioning */
+}
+
+.calendar {
+  flex: 1; /* Ensure the calendar takes up all available space */
+  width: 90%; /* Ensure the calendar width is 100% of its parent */
+  height: 90%; /* Ensure the calendar height is 100% of its parent */
+  box-sizing: border-box; /* Include padding and border in the element's total width and height */
+}
+
+
+form div {
+  margin-bottom: 15px;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+input {
+  width: 100%;
+  padding: 8px;
+  box-sizing: border-box;
+}
+
+button {
+  padding: 10px 20px;
+  margin-top: 10px;
+  cursor: pointer;
+}
