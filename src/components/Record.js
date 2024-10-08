@@ -1,4 +1,7 @@
 import React, { useCallback, useRef, useState } from "react";
+import instance from '../axios/TokenInterceptor';
+import axios from "axios";
+
 
 const Record = () => {
     const [stream, setStream] = useState(null);  // 마이크에서 가져온 오디오 스트림을 저장
@@ -79,7 +82,25 @@ const Record = () => {
         }
         const sound = new File([audioUrl], "soundBlob", { lastModified: new Date().getTime(), type: "audio" });
         console.log(sound); // File 정보 출력
+
+        sendAudioFile(sound);
     }, [audioUrl]);
+
+    // 오디오 파일 fastapi 서버로 전달하기
+    const sendAudioFile = async (sound) => {
+        try{
+            const formData = new FormData();
+            formData.append('file', sound);
+            const response = await axios.post('http://localhost:8000/record', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                },
+            });
+            console.log('녹음 파일 전송 성공');
+        } catch (error) {
+            console.error('녹음 파일 전송 실패');
+        }
+    }
 
     return (
         <>
