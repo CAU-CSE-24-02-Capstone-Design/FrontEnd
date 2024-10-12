@@ -1,7 +1,7 @@
 import React, { useCallback, useRef, useState } from "react";
 import instance from '../axios/TokenInterceptor';
 import axios from "axios";
-
+import { getWaveBlob } from "webm-to-wav-converter";
 
 const Record = () => {
     const [stream, setStream] = useState(null);  // 마이크에서 가져온 오디오 스트림을 저장
@@ -55,9 +55,13 @@ const Record = () => {
 
     const stopRecording = (mediaRecorder, source) => {
 
-        mediaRecorder.ondataavailable = (e) => {
+        mediaRecorder.ondataavailable = async (e) => {
             if (e.data && e.data.size > 0) {
-                setAudioUrl(e.data);
+                console.log("녹음된 데이터:", e.data);
+                const wavBlob = await getWaveBlob(e.data,true);
+                console.log("변환 데이터: ", wavBlob);
+
+                setAudioUrl(wavBlob);
                 setOnRec(true); // 녹음이 끝나면 onRec을 true로 설정
             }
         };
@@ -74,16 +78,14 @@ const Record = () => {
         }
     };
 
-    // 오디오 파일 생성하기
-    const onSubmitAudioFile = useCallback(() => {
-        if (audioUrl) {
-            console.log(URL.createObjectURL(audioUrl)); // 출력된 링크에서 녹음된 오디오 확인 가능
-            alert(URL.createObjectURL(audioUrl));
-        }
-        const sound = new File([audioUrl], "soundBlob", { lastModified: new Date().getTime(), type: "audio" });
-        console.log(sound); // File 정보 출력
 
-        sendAudioFile(sound);
+    // 오디오 파일 생성하기
+    const onSubmitAudioFile = useCallback(async () => {
+        if (audioUrl) {
+            const sound = new File([audioUrl], "soundBlob.wav", { lastModified: new Date().getTime(), type: "audio/wave" });
+            console.log(sound); // File 정보 출력
+            sendAudioFile(sound);
+        }
     }, [audioUrl]);
 
     // 오디오 파일 fastapi 서버로 전달하기
