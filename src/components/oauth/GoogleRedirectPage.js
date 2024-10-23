@@ -34,7 +34,7 @@ const GoogleRedirectPage = () => {
         if (code) {
             handleOAuthGoogle(code);
         }
-    }, [location]);
+    }, [location, handleOAuthGoogle]);
 
     return (
         <div>

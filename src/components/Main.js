@@ -6,7 +6,7 @@ import Record from './Record';
 const Main = () => {
     const testButton = async () => {
         try {
-            const response = await instance.post('http://localhost:8080/test');
+           await instance.post('http://localhost:8080/test');
         } catch (error) {
             console.log("TEST!");
         }

@@ -34,7 +34,7 @@ const KakaoRedirectPage = () => {
         if (code) {
             handleOAuthKakao(code);
         }
-    }, [location]);
+    }, [location, handleOAuthKakao]);
 
     return (
         <div>

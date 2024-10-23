@@ -34,7 +34,7 @@ const NaverRedirectPage = () => {
         if (code) {
             handleOAuthNaver(code);
         }
-    }, [location]);
+    }, [location, handleOAuthNaver]);
 
     return (
         <div>
