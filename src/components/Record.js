@@ -92,7 +92,7 @@ const Record = () => {
         try{
             const formData = new FormData();
             formData.append('file', sound);
-            const response = await axios.post('http://localhost:8000/record', formData, {
+            await axios.post('http://localhost:8000/record', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 },

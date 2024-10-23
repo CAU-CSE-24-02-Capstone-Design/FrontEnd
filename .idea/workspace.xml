@@ -4,7 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b5dda6d2-e76f-446c-9c6c-4e3d50c35be1" name="Changes" comment="" />
+    <list default="true" id="b5dda6d2-e76f-446c-9c6c-4e3d50c35be1" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/src/components/Record.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Record.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/oauth/GoogleRedirectPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/oauth/GoogleRedirectPage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/oauth/KakaoRedirectPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/oauth/KakaoRedirectPage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/oauth/NaverRedirectPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/oauth/NaverRedirectPage.js" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -102,7 +107,7 @@
       <workItem from="1729163799054" duration="4000" />
       <workItem from="1729163826634" duration="602000" />
       <workItem from="1729165779974" duration="1000" />
-      <workItem from="1729692146717" duration="3398000" />
+      <workItem from="1729692146717" duration="3733000" />
     </task>
     <servers />
   </component>
