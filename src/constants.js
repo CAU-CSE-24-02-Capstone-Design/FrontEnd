@@ -1,1 +1,2 @@
-export const SPRING_API_URL = "http://spring:8080";
+export const SPRING_API_URL = "http://api/spring";
+export const FASTAPI_API_URL = "http://api/fastapi";
