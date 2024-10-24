@@ -1,0 +1,1 @@
+export const SPRING_API_URL = "http://spring:8080";

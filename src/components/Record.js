@@ -1,6 +1,7 @@
 import React, { useCallback, useRef, useState } from "react";
 import axios from "axios";
 import { getWaveBlob } from "webm-to-wav-converter";
+import {SPRING_API_URL} from "../constants";
 
 const Record = () => {
     const [stream, setStream] = useState(null);  // 마이크에서 가져온 오디오 스트림을 저장
@@ -92,7 +93,7 @@ const Record = () => {
         try{
             const formData = new FormData();
             formData.append('file', sound);
-            await axios.post('http://localhost:8000/record', formData, {
+            await axios.post(`${SPRING_API_URL}/record`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 },

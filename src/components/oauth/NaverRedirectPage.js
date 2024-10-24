@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import {SPRING_API_URL} from "../../constants";
 
 axios.defaults.withCredentials = true;
 
@@ -11,7 +12,7 @@ const NaverRedirectPage = () => {
     useEffect(() => {
         const handleOAuthNaver = async (code) => {
             try {
-                const response = await axios.get(`http://localhost:8080/oauth/login/naver?code=${code}`, {});
+                const response = await axios.get(`${SPRING_API_URL}/oauth/login/naver?code=${code}`, {});
                 if (response.data.isSuccess) {
                     const accessToken = response.headers['Authorization'] || response.headers['authorization'];
                     localStorage.setItem('accessToken', accessToken);
