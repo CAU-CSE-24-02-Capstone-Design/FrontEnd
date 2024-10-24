@@ -57,6 +57,8 @@ const Record = () => {
 
         mediaRecorder.ondataavailable = async (e) => {
             if (e.data && e.data.size > 0) {
+                const webmUrl = URL.createObjectURL(e.data);
+                alert(webmUrl);
                 console.log("녹음된 데이터:", e.data);
                 const wavBlob = await getWaveBlob(e.data,true);
                 console.log("변환 데이터: ", wavBlob);
@@ -82,6 +84,7 @@ const Record = () => {
     // 오디오 파일 생성하기
     const onSubmitAudioFile = useCallback(async () => {
         if (audioUrl) {
+
             const sound = new File([audioUrl], "soundBlob.wav", { lastModified: new Date().getTime(), type: "audio/wave" });
             console.log(sound); // File 정보 출력
             sendAudioFile(sound);
