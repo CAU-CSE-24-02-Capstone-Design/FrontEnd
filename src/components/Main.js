@@ -2,11 +2,12 @@ import React from 'react';
 import '../css/Main.css'; // Import the CSS file
 import instance from '../axios/TokenInterceptor';
 import Record from './Record';
+import {SPRING_API_URL} from "../constants";
 
 const Main = () => {
     const testButton = async () => {
         try {
-           await instance.post('http://localhost:8080/test');
+           await instance.post(`${SPRING_API_URL}/test`);
         } catch (error) {
             console.log("TEST!");
         }

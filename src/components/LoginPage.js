@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import '../css/LoginPage.css';
 import Record from "./Record";
+import {SPRING_API_URL} from "../constants";
 
 axios.defaults.withCredentials = true;
 
@@ -9,15 +10,15 @@ const LoginPage = message => {
 
     // OAuth2 로그인
     const handleKakaoLoginClick = () => {
-        window.location.href = 'http://localhost:8080/oauth/kakao';
+        window.location.href = `${SPRING_API_URL}/oauth/kakao`;
     };
 
     const handleNaverLoginClick = () => {
-        window.location.href = 'http://localhost:8080/oauth/naver';
+        window.location.href = `${SPRING_API_URL}/oauth/naver`;
     };
 
     const handleGoogleLoginClick = () => {
-        window.location.href = 'http://localhost:8080/oauth/google';
+        window.location.href = `${SPRING_API_URL}/oauth/google`;
     };
 
     return (

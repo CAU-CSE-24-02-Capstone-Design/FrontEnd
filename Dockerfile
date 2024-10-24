@@ -13,5 +13,6 @@ RUN npm install
 # 애플리케이션 코드 복사
 COPY . .
 
-# 애플리케이션 빌드
-RUN npm run build
+EXPOSE 3000
+
+CMD [ "npm", "start" ]
