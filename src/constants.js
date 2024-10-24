@@ -1,2 +1,2 @@
-export const SPRING_API_URL = "http://spring:8080";
-export const FASTAPI_API_URL = "http://fastapi:8000";
+export const SPRING_API_URL = "https://peachmentor.com/api/spring";
+export const FASTAPI_API_URL = "https://peachmentor.com/api/fastapi";
