@@ -1,7 +1,7 @@
 import React, {useCallback, useRef, useState} from "react";
 import axios from "axios";
 import {getWaveBlob} from "webm-to-wav-converter";
-import {LOCAL_FASTAPI_API_URL} from "../constants/api";
+import {FASTAPI_API_URL} from "../constants/api";
 
 const RecordVV = () => {
     const [stream, setStream] = useState(null);  // 마이크에서 가져온 오디오 스트림을 저장
@@ -99,7 +99,7 @@ const RecordVV = () => {
             const formData = new FormData();
             formData.append('file', sound);
             formData.append('answerId', 1);
-            const response = await axios.post(`${LOCAL_FASTAPI_API_URL}/record/insight`, formData, {
+            const response = await axios.post(`${FASTAPI_API_URL}/record/insight`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 },
