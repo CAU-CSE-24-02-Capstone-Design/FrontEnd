@@ -8,7 +8,7 @@ import Record from "../../components/Record";
 import VolumeVisualizer from "./components/VolumeVisualizer";
 import AISpeechPopup from "./components/AISpeechPopup";
 import {ClockLoader} from "react-spinners"; // 로딩중 효과 (ClockLoader)
-import {FASTAPI_API_URL, SPRING_API_URL} from "../../constants/api";
+import {SPRING_API_URL} from "../../constants/api";
 import instance from "../../axios/TokenInterceptor";
 
 const Main = () => {
@@ -21,8 +21,6 @@ const Main = () => {
 
     const [aiResponse, setAiResponse] = useState("");
     const [questionText, setQuestionText] = useState("");
-    const [answerId, setAnswerId] = useState("");
-    const [audioUrl, setAudioUrl] = useState(null);
 
     const handleQuestionClick = async () => {
         try {
@@ -56,30 +54,6 @@ const Main = () => {
         setShowAnalysisMessage(true); // 분석 메시지 표시
     }
 
-    // const sendAudioFile = async (sound) => {
-    //     try {
-    //         const formData = new FormData();
-    //         formData.append("file", sound);
-    //         formData.append("answerId", answerId);
-    //         formData.append("question", questionText);
-    //         const response = await instance.post(`${FASTAPI_API_URL}/record/insight`, formData, {
-    //             headers: {
-    //                 "Content-Type": "multipart/form-data",
-    //             }
-    //         });
-    //
-    //         if (response.data.isSuccess) {
-    //             setAiResponse(response.data.result.insight);
-    //         } else {
-    //             console.error("인사이트 받아오기 오류");
-    //             console.log(response.data.code);
-    //             console.log(response.data.message);
-    //         }
-    //         console.log("인사이트 받아오기 성공");
-    //     } catch (error) {
-    //         console.error("인사이트 받아오기 실패");
-    //     }
-    // };
 
     const handleCloseAISpeechPopup = () => {
         setShowAISpeechPopup(false); // 팝업 닫기
