@@ -83,20 +83,7 @@ const Record = ({answerId, questionText, onResponse}) => {
         }
     };
 
-    // 오디오 파일 생성하기
-    const onSubmitAudioFile = useCallback(async () => {
-        if (audioUrl) {
-            const sound = new File([audioUrl], "soundBlob.wav", {
-                lastModified: new Date().getTime(),
-                type: "audio/wave",
-            });
-            console.log(sound); // File 정보 출력
-            sendAudioFile(sound);
-        }
-    }, [audioUrl]);
-
-    // 오디오 파일 fastapi 서버로 전달하기
-    const sendAudioFile = async (sound) => {
+    const sendAudioFile = useCallback(async (sound) => {
         try {
             const formData = new FormData();
             formData.append("file", sound);
@@ -111,6 +98,7 @@ const Record = ({answerId, questionText, onResponse}) => {
             );
 
             if (response.data.isSuccess) {
+                console.log(insight);
                 onResponse(response.data.result.insight);
             } else {
                 console.error("인사이트 받아오기 오류:", response.data.message);
@@ -118,7 +106,18 @@ const Record = ({answerId, questionText, onResponse}) => {
         } catch (error) {
             console.error("인사이트 받아오기 실패");
         }
-    };
+    }, [answerId, questionText, onResponse]); // 필요한 의존성 추가
+
+    const onSubmitAudioFile = useCallback(async () => {
+        if (audioUrl) {
+            const sound = new File([audioUrl], "soundBlob.wav", {
+                lastModified: new Date().getTime(),
+                type: "audio/wave",
+            });
+            console.log(sound); // File 정보 출력
+            await sendAudioFile(sound);
+        }
+    }, [audioUrl, sendAudioFile]); // sendAudioFile이 useCallback으로 래핑되었으므로 종속성 배열에 추가
 
     return (
         <>
