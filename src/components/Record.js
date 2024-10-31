@@ -71,7 +71,7 @@ const Record = ({isRecording, answerId, questionText, onResponse}) => {
                 });
             }
         },
-        [stream]
+        [stream, onSubmitAudioFile]
     );
 
     // 녹음 시작
