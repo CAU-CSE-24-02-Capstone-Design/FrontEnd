@@ -10,8 +10,10 @@ import AISpeechPopup from "./components/AISpeechPopup";
 import {ClockLoader} from "react-spinners"; // 로딩중 효과 (ClockLoader)
 import {SPRING_API_URL} from "../../constants/api";
 import instance from "../../axios/TokenInterceptor";
+import {useNavigate} from "react-router-dom";
 
 const Main = () => {
+    const navigate = useNavigate();
     const [showCountdown, setShowCountdown] = useState(false);
     const [showProgressTimer, setShowProgressTimer] = useState(false);
     const [isRecording, setIsRecording] = useState(false);
