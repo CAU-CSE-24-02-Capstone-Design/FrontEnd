@@ -98,7 +98,7 @@ const Record = ({answerId, questionText, onResponse}) => {
             );
 
             if (response.data.isSuccess) {
-                console.log(insight);
+                console.log(response.data.result.insight);
                 onResponse(response.data.result.insight);
             } else {
                 console.error("인사이트 받아오기 오류:", response.data.message);
