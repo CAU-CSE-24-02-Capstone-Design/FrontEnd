@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import Header from "../../components/Header";
 import NavBar from "../../components/NavBar";
 import Countdown from "./components/Countdown";
@@ -7,98 +7,141 @@ import ProgressTimer from "./components/ProgressTimer";
 import Record from "../../components/Record";
 import VolumeVisualizer from "./components/VolumeVisualizer";
 import AISpeechPopup from "./components/AISpeechPopup";
-import { ClockLoader } from "react-spinners"; // 로딩중 효과 (ClockLoader)
+import {ClockLoader} from "react-spinners"; // 로딩중 효과 (ClockLoader)
+import {FASTAPI_API_URL, SPRING_API_URL} from "../../constants/api";
+import instance from "../../axios/TokenInterceptor";
 
 const Main = () => {
-  const [showCountdown, setShowCountdown] = useState(false);
-  const [showProgressTimer, setShowProgressTimer] = useState(false);
-  const [isRecording, setIsRecording] = useState(false);
-  const [showAISpeechPopup, setShowAISpeechPopup] = useState(false);
-  const [showAnalysisMessage, setShowAnalysisMessage] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const aiResponse = "오늘의 질문에 대해 AI가 답변한 내용"; // 이후에 GPT와 연동 (임시로 텍스트 삽입)
+    const [showCountdown, setShowCountdown] = useState(false);
+    const [showProgressTimer, setShowProgressTimer] = useState(false);
+    const [isRecording, setIsRecording] = useState(false);
+    const [showAISpeechPopup, setShowAISpeechPopup] = useState(false);
+    const [showAnalysisMessage, setShowAnalysisMessage] = useState(false);
+    const [loading, setLoading] = useState(false);
 
-  const handleQuestionClick = () => {
-    setShowCountdown(true);
-  };
+    const [aiResponse, setAiResponse] = useState("");
+    const [questionText, setQuestionText] = useState("");
+    const [answerId, setAnswerId] = useState("");
+    const [audioUrl, setAudioUrl] = useState(null);
 
-  const handleCountdownComplete = () => {
-    setShowCountdown(false);
-    setShowProgressTimer(true); // 1분 타이머 시작
-    setIsRecording(true); // 녹음 시작
-  };
+    const handleQuestionClick = async () => {
+        try {
+            const response = await instance.get(`${SPRING_API_URL}/question`);
+            if (response.data.isSuccess) {
+                setQuestionText(response.data.result.questionDescription)
+                setAnswerId(response.data.result.answerId);
+            } else {
+                console.error("질문 받아오기 오류");
+                console.log(response.data.code);
+                console.log(response.data.message);
+            }
+            console.log("질문 받아오기 성공");
+        } catch (error) {
+            console.error("질문 받아오기 실패");
+        }
 
-  const handleProgressTimeUp = () => {
-    setShowProgressTimer(false);
-    setIsRecording(false); // 녹음 중지
-    setLoading(true); // 로딩 시작
-    setShowAnalysisMessage(true); // 분석 메시지 표시
-  };
+        setShowCountdown(true);
+    };
 
-  const handleCloseAISpeechPopup = () => {
-    setShowAISpeechPopup(false); // 팝업 닫기
-  };
+    const handleCountdownComplete = () => {
+        setShowCountdown(false);
+        setShowProgressTimer(true); // 1분 타이머 시작
+        setIsRecording(true); // 녹음 시작
+    };
 
-  const handleShowAISpeechPopup = () => {
-    setShowAISpeechPopup(true); // AI 답변 팝업 열기
-  };
+    const handleProgressTimeUp = async () => {
+        setShowProgressTimer(false);
+        setIsRecording(false); // 녹음 중지
+        setLoading(true); // 로딩 시작
+        setShowAnalysisMessage(true); // 분석 메시지 표시
+    }
 
-  const questionText =
-    "당신은 어떤 도형을 닮은 것 같나요?\n그 도형을 닮은 이유는 무엇인가요?\n1분 동안 말해보세요!";
+    // const sendAudioFile = async (sound) => {
+    //     try {
+    //         const formData = new FormData();
+    //         formData.append("file", sound);
+    //         formData.append("answerId", answerId);
+    //         formData.append("question", questionText);
+    //         const response = await instance.post(`${FASTAPI_API_URL}/record/insight`, formData, {
+    //             headers: {
+    //                 "Content-Type": "multipart/form-data",
+    //             }
+    //         });
+    //
+    //         if (response.data.isSuccess) {
+    //             setAiResponse(response.data.result.insight);
+    //         } else {
+    //             console.error("인사이트 받아오기 오류");
+    //             console.log(response.data.code);
+    //             console.log(response.data.message);
+    //         }
+    //         console.log("인사이트 받아오기 성공");
+    //     } catch (error) {
+    //         console.error("인사이트 받아오기 실패");
+    //     }
+    // };
 
-  return (
-    <div className="w-full h-full max-w-[500px] mx-auto flex flex-col bg-[#fcfcfc]">
-      <Header />
-      <main className="flex flex-col items-center justify-center flex-grow px-4">
-        {!showAnalysisMessage && !showProgressTimer && !showCountdown && (
-          <button
-            onClick={handleQuestionClick}
-            className="px-6 py-4 mt-6 text-lg text-white rounded bg-primary-50 font-paperlogy-title"
-          >
-            오늘의 질문
-          </button>
-        )}
+    const handleCloseAISpeechPopup = () => {
+        setShowAISpeechPopup(false); // 팝업 닫기
+    };
 
-        {(showCountdown || showProgressTimer) && (
-          <Question questionText={questionText} />
-        )}
+    const handleShowAISpeechPopup = async () => {
+        setShowAISpeechPopup(true); // AI 답변 팝업 열기
+    };
 
-        {showCountdown && (
-          <Countdown onCountdownComplete={handleCountdownComplete} />
-        )}
+    return (
+        <div className="w-full h-full max-w-[500px] mx-auto flex flex-col bg-[#fcfcfc]">
+            <Header/>
+            <main className="flex flex-col items-center justify-center flex-grow px-4">
+                {!showAnalysisMessage && !showProgressTimer && !showCountdown && (
+                    <button
+                        onClick={handleQuestionClick}
+                        className="px-6 py-4 mt-6 text-lg text-white rounded bg-primary-50 font-paperlogy-title"
+                    >
+                        오늘의 질문
+                    </button>
+                )}
 
-        {showProgressTimer && (
-          <>
-            <ProgressTimer duration={1} onTimeUp={handleProgressTimeUp} />
-            <Record />
-            <VolumeVisualizer isRecording={isRecording} />
-          </>
-        )}
+                {(showCountdown || showProgressTimer) && (
+                    <Question questionText={questionText}/>
+                )}
 
-        {loading && (
-          <div className="flex flex-col items-center justify-center mt-4">
-            <p className="mb-10 text-xl font-semibold text-center text-grayscale-100">
-              답변 내용을 분석 중입니다.
-            </p>
-            <ClockLoader color="#4A90E2" loading={loading} size={60} />
-            <button
-              onClick={handleShowAISpeechPopup}
-              className="px-8 py-3 mt-10 text-lg font-semibold text-white rounded-full bg-primary-50"
-            >
-              AI 답변 보기
-            </button>
-          </div>
-        )}
+                {showCountdown && (
+                    <Countdown onCountdownComplete={handleCountdownComplete}/>
+                )}
 
-        <AISpeechPopup
-          isOpen={showAISpeechPopup}
-          onClose={handleCloseAISpeechPopup}
-          response={aiResponse}
-        />
-      </main>
-      <NavBar />
-    </div>
-  );
+                {showProgressTimer && (
+                    <>
+                        <ProgressTimer duration={1} onTimeUp={handleProgressTimeUp}/>
+                        <Record/>
+                        <VolumeVisualizer isRecording={isRecording}/>
+                    </>
+                )}
+
+                {loading && (
+                    <div className="flex flex-col items-center justify-center mt-4">
+                        <p className="mb-10 text-xl font-semibold text-center text-grayscale-100">
+                            답변 내용을 분석 중입니다.
+                        </p>
+                        <ClockLoader color="#4A90E2" loading={loading} size={60}/>
+                        <button
+                            onClick={handleShowAISpeechPopup}
+                            className="px-8 py-3 mt-10 text-lg font-semibold text-white rounded-full bg-primary-50"
+                        >
+                            AI 답변 보기
+                        </button>
+                    </div>
+                )}
+
+                <AISpeechPopup
+                    isOpen={showAISpeechPopup}
+                    onClose={handleCloseAISpeechPopup}
+                    response={aiResponse}
+                />
+            </main>
+            <NavBar/>
+        </div>
+    );
 };
 
 export default Main;
