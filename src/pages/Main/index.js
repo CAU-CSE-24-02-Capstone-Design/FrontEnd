@@ -19,7 +19,8 @@ const Main = () => {
     const [showAnalysisMessage, setShowAnalysisMessage] = useState(false);
     const [loading, setLoading] = useState(false);
 
-    const [aiResponse, setAiResponse] = useState("");
+    const aiResponse = "111";
+    // const [aiResponse, setAiResponse] = useState("");
     const [questionText, setQuestionText] = useState("");
 
     const handleQuestionClick = async () => {
