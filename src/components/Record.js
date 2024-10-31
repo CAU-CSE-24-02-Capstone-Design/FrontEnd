@@ -69,6 +69,8 @@ const Record = () => {
 
                 setAudioUrl(wavBlob);
                 setOnRec(true); // 녹음이 끝나면 onRec을 true로 설정
+
+                // todo onSubmitAudioFile 실행
             }
         };
 

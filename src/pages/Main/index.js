@@ -27,7 +27,6 @@ const Main = () => {
             const response = await instance.get(`${SPRING_API_URL}/question`);
             if (response.data.isSuccess) {
                 setQuestionText(response.data.result.questionDescription)
-                setAnswerId(response.data.result.answerId);
             } else {
                 console.error("질문 받아오기 오류");
                 console.log(response.data.code);
@@ -42,6 +41,8 @@ const Main = () => {
     };
 
     const handleCountdownComplete = () => {
+        // todo onRecAudio 실행
+
         setShowCountdown(false);
         setShowProgressTimer(true); // 1분 타이머 시작
         setIsRecording(true); // 녹음 시작
