@@ -12,23 +12,18 @@ const Record = ({isRecording, answerId, questionText, onResponse}) => {
     const sourceRef = useRef(null); // MediaStreamSource 참조
 
     // 녹음 시작
-    const onRecAudio = async () => {
-        if (audioContextRef.current) {
-            // AudioContext가 이미 존재하면 재사용
-            console.log("AudioContext already exists, reusing.");
-        } else {
-            // AudioContext가 없으면 새로 생성
-            audioContextRef.current = new (window.AudioContext ||
-                window.webkitAudioContext)();
+    const onRecAudio = useCallback(async () => {
+        if (!audioContextRef.current) {
+            audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)();
         }
 
         try {
-            const stream = await navigator.mediaDevices.getUserMedia({audio: true});
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
             const mediaRecorder = new MediaRecorder(stream);
             mediaRecorder.start();
             setStream(stream);
             setMedia(mediaRecorder);
-            setOnRec(false); // 녹음 시작 시 onRec을 false로 설정
+            setOnRec(false);
 
             const source = audioContextRef.current.createMediaStreamSource(stream);
             sourceRef.current = source;
@@ -47,81 +42,82 @@ const Record = ({isRecording, answerId, questionText, onResponse}) => {
             //         stopRecording(mediaRecorder, source);
             //     }
             // };
-
         } catch (err) {
             console.error("Error accessing audio stream:", err);
         }
-    };
+    }, []);
 
-    // 녹음 중지
+    // 녹음 중지 함수
     const offRecAudio = useCallback(() => {
         if (media && sourceRef.current) {
             stopRecording(media, sourceRef.current);
         }
-    }, [media]);
+    }, [media, stopRecording]);
 
-    const stopRecording = async (mediaRecorder, source) => {
+    // 녹음 중지
+    const stopRecording = useCallback(
+        async (mediaRecorder, source) => {
+            mediaRecorder.ondataavailable = async (e) => {
+                if (e.data && e.data.size > 0) {
+                    const wavBlob = await getWaveBlob(e.data, true);
+                    setAudioUrl(wavBlob);
+                    setOnRec(true);
+                    await onSubmitAudioFile(wavBlob);
+                }
+            };
 
-        mediaRecorder.ondataavailable = async (e) => {
-            if (e.data && e.data.size > 0) {
-                const wavBlob = await getWaveBlob(e.data, true);
-                console.log("변환 데이터: ", wavBlob);
-                setAudioUrl(wavBlob);
-                setOnRec(true); // 녹음이 끝나면 onRec을 true로 설정
-                await onSubmitAudioFile();
+            stream.getAudioTracks().forEach((track) => track.stop());
+            mediaRecorder.stop();
+            source.disconnect();
+
+            if (audioContextRef.current) {
+                audioContextRef.current.close().then(() => {
+                    audioContextRef.current = null;
+                });
             }
-        };
-
-        stream.getAudioTracks().forEach((track) => track.stop());
-        mediaRecorder.stop();
-        source.disconnect();
-
-        // AudioContext가 열려있는지 확인 후 닫기
-        if (audioContextRef.current) {
-            audioContextRef.current.close().then(() => {
-                audioContextRef.current = null; // AudioContext를 닫은 후 null로 설정
-            });
-        }
-    };
+        },
+        [stream]
+    );
 
     // 오디오 파일 생성하기
-    const onSubmitAudioFile = useCallback(async () => {
-        if (audioUrl) {
-            const sound = new File([audioUrl], "soundBlob.wav", {
+    const onSubmitAudioFile = useCallback(
+        async (wavBlob) => {
+            const sound = new File([wavBlob], "soundBlob.wav", {
                 lastModified: new Date().getTime(),
                 type: "audio/wave",
             });
-            console.log(sound); // File 정보 출력
             await sendAudioFile(sound);
-        }
-    }, [audioUrl]);
+        },
+        [sendAudioFile]
+    );
 
     // 오디오 파일 fastapi 서버로 전달하기
-    const sendAudioFile = async (sound) => {
-        try {
-            const formData = new FormData();
-            formData.append("file", sound);
-            formData.append("answerId", answerId);
-            formData.append("question", questionText);
-            const response = await instance.post(`${FASTAPI_API_URL}/record/insight`, formData, {
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                }
-            });
+    const sendAudioFile = useCallback(
+        async (sound) => {
+            try {
+                const formData = new FormData();
+                formData.append("file", sound);
+                formData.append("answerId", answerId);
+                formData.append("question", questionText);
+                const response = await instance.post(
+                    `${FASTAPI_API_URL}/record/insight`,
+                    formData,
+                    {
+                        headers: { "Content-Type": "multipart/form-data" },
+                    }
+                );
 
-            if (response.data.isSuccess) {
-                console.log(response.data.result.insight);
-                onResponse(response.data.result.insight);
-            } else {
-                console.error("인사이트 받아오기 오류");
-                console.log(response.data.code);
-                console.log(response.data.message);
+                if (response.data.isSuccess) {
+                    onResponse(response.data.result.insight);
+                } else {
+                    console.error("인사이트 받아오기 오류:", response.data.message);
+                }
+            } catch (error) {
+                console.error("인사이트 받아오기 실패");
             }
-            console.log("인사이트 받아오기 성공");
-        } catch (error) {
-            console.error("인사이트 받아오기 실패");
-        }
-    };
+        },
+        [answerId, questionText, onResponse]
+    );
 
     useEffect(() => {
         if (isRecording)
