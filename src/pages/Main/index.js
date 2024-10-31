@@ -90,7 +90,6 @@ const Main = () => {
                     <>
                         <ProgressTimer duration={1} onTimeUp={handleProgressTimeUp}/>
                         <Record
-                            isRecording={isRecording}
                             answerId={answerId}
                             questionText={questionText}
                             onResponse={(response) => setAiResponse(response)}
