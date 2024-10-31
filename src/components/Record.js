@@ -99,6 +99,8 @@ const Record = ({answerId, questionText, onResponse}) => {
 
             console.log(response.data.result.insight);
             onResponse(response.data.result.insight);
+
+            // navigate
         } catch (error) {
             console.error("인사이트 받아오기 실패");
         }
@@ -120,7 +122,7 @@ const Record = ({answerId, questionText, onResponse}) => {
             <button onClick={onRec ? onRecAudio : offRecAudio}>
                 {onRec ? "녹음 시작" : "녹음 중지"}
             </button>
-            <button onClick={onSubmitAudioFile}>결과 확인</button>
+            <button onClick={onSubmitAudioFile}>다음 페이지로</button>
         </>
     );
 };
