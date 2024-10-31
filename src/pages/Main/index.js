@@ -103,12 +103,18 @@ const Main = () => {
                         <p className="mb-10 text-xl font-semibold text-center text-grayscale-100">
                             답변 내용을 분석 중입니다.
                         </p>
-                        <ClockLoader color="#4A90E2" loading={loading} size={60}/>
+                        <ClockLoader color="#4A90E2" loading={loading} size={15}/>
                         <button
                             onClick={handleShowAISpeechPopup}
                             className="px-8 py-3 mt-10 text-lg font-semibold text-white rounded-full bg-primary-50"
                         >
                             AI 답변 보기
+                        </button>
+                        <button
+                            onClick={() => navigate("/recordscript")} // 화살표 함수로 변경
+                            className="px-8 py-3 mt-10 text-lg font-semibold text-white rounded-full bg-primary-50"
+                        >
+                            피드백 받기
                         </button>
                     </div>
                 )}
