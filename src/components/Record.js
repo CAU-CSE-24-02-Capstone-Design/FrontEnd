@@ -54,24 +54,20 @@ const Record = ({isRecording, answerId, questionText, onResponse}) => {
     };
 
     // 녹음 중지
-    const offRecAudio = () => {
-        stopRecording(media, sourceRef.current);
-    };
+    const offRecAudio = useCallback(() => {
+        if (media && sourceRef.current) {
+            stopRecording(media, sourceRef.current);
+        }
+    }, [media]);
 
-    const stopRecording = (mediaRecorder, source) => {
+    const stopRecording = async (mediaRecorder, source) => {
 
         mediaRecorder.ondataavailable = async (e) => {
             if (e.data && e.data.size > 0) {
-                const webmUrl = URL.createObjectURL(e.data);
-                alert(webmUrl);
-                console.log("녹음된 데이터:", e.data);
                 const wavBlob = await getWaveBlob(e.data, true);
                 console.log("변환 데이터: ", wavBlob);
-
                 setAudioUrl(wavBlob);
                 setOnRec(true); // 녹음이 끝나면 onRec을 true로 설정
-
-                // todo onSubmitAudioFile 실행
                 await onSubmitAudioFile();
             }
         };
@@ -133,7 +129,7 @@ const Record = ({isRecording, answerId, questionText, onResponse}) => {
         else if (!isRecording) {
             offRecAudio();
         }
-    }, [isRecording]);
+    }, [isRecording, onRecAudio, offRecAudio]);
 
     return (
         <>
