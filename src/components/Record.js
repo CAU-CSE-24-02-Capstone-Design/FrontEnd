@@ -1,10 +1,9 @@
-import React, {useCallback, useRef, useState} from "react";
+import React, {useCallback, useEffect, useRef, useState} from "react";
 import {getWaveBlob} from "webm-to-wav-converter";
 import {FASTAPI_API_URL} from "../constants/api";
-import VolumeVisualizer from "../pages/Main/components/VolumeVisualizer";
 import instance from "../axios/TokenInterceptor";
 
-const Record = () => {
+const Record = ({isRecording, answerId, questionText, onResponse}) => {
     const [stream, setStream] = useState(null); // 마이크에서 가져온 오디오 스트림을 저장
     const [media, setMedia] = useState(null); // MediaRecorder 객체를 저장하여 녹음을 관리
     const [onRec, setOnRec] = useState(true); // 녹음 중인지 여부를 추적
@@ -41,13 +40,14 @@ const Record = () => {
             );
             source.connect(workletNode).connect(audioContextRef.current.destination);
 
-            workletNode.port.onmessage = (event) => {
-                const {currentTime} = event.data;
-                if (currentTime > 60) {
-                    // 1분 후 자동 정지
-                    stopRecording(mediaRecorder, source);
-                }
-            };
+            // workletNode.port.onmessage = (event) => {
+            //     const {currentTime} = event.data;
+            //     if (currentTime > 60) {
+            //         // 1분 후 자동 정지
+            //         stopRecording(mediaRecorder, source);
+            //     }
+            // };
+
         } catch (err) {
             console.error("Error accessing audio stream:", err);
         }
@@ -59,6 +59,7 @@ const Record = () => {
     };
 
     const stopRecording = (mediaRecorder, source) => {
+
         mediaRecorder.ondataavailable = async (e) => {
             if (e.data && e.data.size > 0) {
                 const webmUrl = URL.createObjectURL(e.data);
@@ -71,6 +72,7 @@ const Record = () => {
                 setOnRec(true); // 녹음이 끝나면 onRec을 true로 설정
 
                 // todo onSubmitAudioFile 실행
+                await onSubmitAudioFile();
             }
         };
 
@@ -94,7 +96,7 @@ const Record = () => {
                 type: "audio/wave",
             });
             console.log(sound); // File 정보 출력
-            sendAudioFile(sound);
+            await sendAudioFile(sound);
         }
     }, [audioUrl]);
 
@@ -103,29 +105,41 @@ const Record = () => {
         try {
             const formData = new FormData();
             formData.append("file", sound);
-            await instance.post(`${FASTAPI_API_URL}/record`, formData, {
+            formData.append("answerId", answerId);
+            formData.append("question", questionText);
+            const response = await instance.post(`${FASTAPI_API_URL}/record/insight`, formData, {
                 headers: {
                     "Content-Type": "multipart/form-data",
-                },
+                }
             });
-            console.log("녹음 파일 전송 성공");
+
+            if (response.data.isSuccess) {
+                console.log(response.data.result.insight);
+                onResponse(response.data.result.insight);
+            } else {
+                console.error("인사이트 받아오기 오류");
+                console.log(response.data.code);
+                console.log(response.data.message);
+            }
+            console.log("인사이트 받아오기 성공");
         } catch (error) {
-            console.error("녹음 파일 전송 실패");
+            console.error("인사이트 받아오기 실패");
         }
     };
 
+    useEffect(() => {
+        if (isRecording)
+            onRecAudio();
+        else if (!isRecording) {
+            offRecAudio();
+        }
+    }, [isRecording]);
+
     return (
         <>
-            <button onClick={onRec ? onRecAudio : offRecAudio}>
-                {onRec ? "녹음 시작" : "녹음 중지"}
+            <button onClick={offRecAudio} disabled={onRec}>
+                녹음 중지
             </button>
-            {!onRec && audioContextRef.current && sourceRef.current && (
-                <VolumeVisualizer
-                    audioContext={audioContextRef.current}
-                    source={sourceRef.current}
-                />
-            )}
-            <button onClick={onSubmitAudioFile}>결과 확인</button>
         </>
     );
 };

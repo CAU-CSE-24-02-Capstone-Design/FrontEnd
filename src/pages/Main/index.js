@@ -19,15 +19,18 @@ const Main = () => {
     const [showAnalysisMessage, setShowAnalysisMessage] = useState(false);
     const [loading, setLoading] = useState(false);
 
-    const aiResponse = "111";
-    // const [aiResponse, setAiResponse] = useState("");
+    const [answerId, setAnswerId] = useState("");
+    const [aiResponse, setAiResponse] = useState("");
     const [questionText, setQuestionText] = useState("");
 
     const handleQuestionClick = async () => {
         try {
             const response = await instance.get(`${SPRING_API_URL}/question`);
             if (response.data.isSuccess) {
-                setQuestionText(response.data.result.questionDescription)
+                setQuestionText(response.data.result.questionDescription);
+                setAnswerId(response.data.result.answerId);
+                console.log(questionText)
+                console.log(answerId)
             } else {
                 console.error("질문 받아오기 오류");
                 console.log(response.data.code);
@@ -42,8 +45,6 @@ const Main = () => {
     };
 
     const handleCountdownComplete = () => {
-        // todo onRecAudio 실행
-
         setShowCountdown(false);
         setShowProgressTimer(true); // 1분 타이머 시작
         setIsRecording(true); // 녹음 시작
@@ -55,7 +56,6 @@ const Main = () => {
         setLoading(true); // 로딩 시작
         setShowAnalysisMessage(true); // 분석 메시지 표시
     }
-
 
     const handleCloseAISpeechPopup = () => {
         setShowAISpeechPopup(false); // 팝업 닫기
@@ -89,7 +89,12 @@ const Main = () => {
                 {showProgressTimer && (
                     <>
                         <ProgressTimer duration={1} onTimeUp={handleProgressTimeUp}/>
-                        <Record/>
+                        <Record
+                            isRecording={isRecording}
+                            answerId={answerId}
+                            questionText={questionText}
+                            onResponse={(response) => setAiResponse(response)}
+                        />
                         <VolumeVisualizer isRecording={isRecording}/>
                     </>
                 )}
