@@ -56,7 +56,6 @@ const Record = ({isRecording, answerId, questionText, onResponse}) => {
             mediaRecorder.ondataavailable = async (e) => {
                 if (e.data && e.data.size > 0) {
                     const wavBlob = await getWaveBlob(e.data, true);
-                    setAudioUrl(wavBlob);
                     setOnRec(true);
                     await onSubmitAudioFile(wavBlob);
                 }
