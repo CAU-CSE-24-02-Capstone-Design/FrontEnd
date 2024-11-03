@@ -79,8 +79,7 @@ const Record = ({isRecording, onRec, setOnRec, answerId, questionText, onRespons
     const offRecAudio = useCallback(() => {
         if (!onRec) return;
         stopRecording(media, sourceRef.current);
-        handleProgressTimeUp();
-    }, [onRec, media, stopRecording, handleProgressTimeUp]);
+    }, [onRec, media, stopRecording]);
 
 
     const sendAudioFile = useCallback(async (sound) => {
@@ -98,10 +97,12 @@ const Record = ({isRecording, onRec, setOnRec, answerId, questionText, onRespons
             );
 
             onResponse(response.data.result.insight);
+            handleProgressTimeUp();
+
         } catch (error) {
             console.error("인사이트 받아오기 실패");
         }
-    }, [answerId, questionText, onResponse]); // 필요한 의존성 추가
+    }, [answerId, questionText, onResponse, handleProgressTimeUp]); // 필요한 의존성 추가
 
     const onSubmitAudioFile = useCallback(async () => {
         if (audioUrl) {
