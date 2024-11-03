@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect} from "react";
+import React, {useCallback, useEffect, useRef, useState} from "react";
 import {getWaveBlob} from "webm-to-wav-converter";
 import {FASTAPI_API_URL} from "../../../constants/api";
 import instance from "../../../axios/TokenInterceptor";
@@ -11,9 +11,13 @@ const Record = ({
                     questionText,
                     onResponse,
                     handleProgressTimeUp,
-                    audioRecorder
                 }) => {
-    const {stream, setStream, media, setMedia, audioUrl, setAudioUrl, audioContextRef, sourceRef} = audioRecorder;
+    // const {stream, setStream, media, setMedia, audioUrl, setAudioUrl, audioContextRef, sourceRef} = audioRecorder;
+    const [stream, setStream] = useState(null); // 마이크에서 가져온 오디오 스트림을 저장
+    const [media, setMedia] = useState(null); // MediaRecorder 객체를 저장하여 녹음을 관리
+    const [audioUrl, setAudioUrl] = useState(null); // 녹음된 오디오 데이터를 Blob으로 저장
+    const audioContextRef = useRef(null); // AudioContext 참조
+    const sourceRef = useRef(null); // MediaStreamSource 참조
 
     // 녹음 시작
     const onRecAudio = useCallback(async () => {
@@ -55,7 +59,7 @@ const Record = ({
         } catch (err) {
             console.error("Error accessing audio stream:", err);
         }
-    }, [setOnRec, setMedia, setStream, audioContextRef, sourceRef]);
+    }, [setOnRec]);
 
     const sendAudioFile = useCallback(async (sound) => {
         try {
@@ -113,14 +117,14 @@ const Record = ({
                 setOnRec(false);
             });
         }
-    }, [stream, setOnRec, setAudioUrl, audioContextRef, onSubmitAudioFile]);
+    }, [stream, setOnRec, onSubmitAudioFile]);
 
     // 녹음 중지
     const offRecAudio = useCallback(() => {
         if (!onRec) return;
         handleProgressTimeUp();
         stopRecording(media, sourceRef.current);
-    }, [onRec, media, stopRecording, handleProgressTimeUp, sourceRef]);
+    }, [onRec, media, stopRecording, handleProgressTimeUp]);
 
 
     useEffect(() => {

@@ -11,7 +11,6 @@ import {ClockLoader} from "react-spinners"; // 로딩중 효과 (ClockLoader)
 import {SPRING_API_URL} from "../../constants/api";
 import instance from "../../axios/TokenInterceptor";
 import {useNavigate} from "react-router-dom";
-import AudioRecorder from "./hook/AudioRecorder";
 
 const Main = () => {
     const navigate = useNavigate();
@@ -26,8 +25,6 @@ const Main = () => {
     const [answerId, setAnswerId] = useState("");
     const [aiResponse, setAiResponse] = useState("");
     const [questionText, setQuestionText] = useState("");
-
-    const audioRecorder = AudioRecorder();
 
     const handleQuestionClick = async () => {
         try {
@@ -104,7 +101,6 @@ const Main = () => {
                             questionText={questionText}
                             onResponse={(response) => setAiResponse(response)}
                             handleProgressTimeUp={handleProgressTimeUp}
-                            audioRecorder={audioRecorder}
                         />
                         <VolumeVisualizer isRecording={isRecording}/>
                     </>
