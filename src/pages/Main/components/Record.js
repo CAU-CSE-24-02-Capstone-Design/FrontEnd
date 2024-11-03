@@ -12,7 +12,7 @@ const Record = ({isRecording, answerId, questionText, onResponse, handleProgress
     const sourceRef = useRef(null); // MediaStreamSource 참조
 
     // 녹음 시작
-    const onRecAudio = async () => {
+    const onRecAudio = useCallback(async () => {
         if (audioContextRef.current) {
             // AudioContext가 이미 존재하면 재사용
             console.log("AudioContext already exists, reusing.");
@@ -51,14 +51,14 @@ const Record = ({isRecording, answerId, questionText, onResponse, handleProgress
         } catch (err) {
             console.error("Error accessing audio stream:", err);
         }
-    };
+    }, []);
 
     // 녹음 중지
-    const offRecAudio = () => {
+    const offRecAudio = useCallback(() => {
         if (!onRec) return;
         stopRecording(media, sourceRef.current);
         handleProgressTimeUp();
-    };
+    }, [onRec, media, handleProgressTimeUp]);
 
     const stopRecording = (mediaRecorder, source) => {
         mediaRecorder.ondataavailable = async (e) => {
