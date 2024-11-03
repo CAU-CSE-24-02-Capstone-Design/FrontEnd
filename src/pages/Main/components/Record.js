@@ -3,9 +3,10 @@ import {getWaveBlob} from "webm-to-wav-converter";
 import {FASTAPI_API_URL} from "../../../constants/api";
 import instance from "../../../axios/TokenInterceptor";
 
-const Record = ({isRecording, answerId, questionText, onResponse}) => {
+const Record = ({isRecording, answerId, questionText, onResponse, handleProgressTimeUp}) => {
     const [stream, setStream] = useState(null); // 마이크에서 가져온 오디오 스트림을 저장
     const [media, setMedia] = useState(null); // MediaRecorder 객체를 저장하여 녹음을 관리
+    const [onRec, setOnRec] = useState(false);
     const [audioUrl, setAudioUrl] = useState(null); // 녹음된 오디오 데이터를 Blob으로 저장
     const audioContextRef = useRef(null); // AudioContext 참조
     const sourceRef = useRef(null); // MediaStreamSource 참조
@@ -27,7 +28,7 @@ const Record = ({isRecording, answerId, questionText, onResponse}) => {
             mediaRecorder.start();
             setStream(stream);
             setMedia(mediaRecorder);
-            setOnRec(false); // 녹음 시작 시 onRec을 false로 설정
+            setOnRec(true);
 
             const source = audioContextRef.current.createMediaStreamSource(stream);
             sourceRef.current = source;
@@ -39,13 +40,14 @@ const Record = ({isRecording, answerId, questionText, onResponse}) => {
             );
             source.connect(workletNode).connect(audioContextRef.current.destination);
 
-            workletNode.port.onmessage = (event) => {
-                const {currentTime} = event.data;
-                if (currentTime > 60) {
-                    // 1분 후 자동 정지
-                    stopRecording(mediaRecorder, source);
-                }
-            };
+            // workletNode.port.onmessage = (event) => {
+            //     const {currentTime} = event.data;
+            //     if (currentTime > 60) {
+            //         // 1분 후 자동 정지
+            //         stopRecording(mediaRecorder, source);
+            //     }
+            // };
+
         } catch (err) {
             console.error("Error accessing audio stream:", err);
         }
@@ -53,7 +55,9 @@ const Record = ({isRecording, answerId, questionText, onResponse}) => {
 
     // 녹음 중지
     const offRecAudio = () => {
+        if (!onRec) return;
         stopRecording(media, sourceRef.current);
+        handleProgressTimeUp();
     };
 
     const stopRecording = (mediaRecorder, source) => {
@@ -63,7 +67,7 @@ const Record = ({isRecording, answerId, questionText, onResponse}) => {
                 console.log("변환 데이터: ", wavBlob);
 
                 setAudioUrl(wavBlob);
-                setOnRec(true); // 녹음이 끝나면 onRec을 true로 설정
+                setOnRec(false);
             }
         };
 

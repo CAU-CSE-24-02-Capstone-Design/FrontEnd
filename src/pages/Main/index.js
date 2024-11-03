@@ -96,6 +96,7 @@ const Main = () => {
                             answerId={answerId}
                             questionText={questionText}
                             onResponse={(response) => setAiResponse(response)}
+                            handleProgressTimeUp={handleProgressTimeUp}
                         />
                         <VolumeVisualizer isRecording={isRecording}/>
                     </>
