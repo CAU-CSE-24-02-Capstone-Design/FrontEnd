@@ -56,7 +56,7 @@ const Record = ({
         } catch (err) {
             console.error("Error accessing audio stream:", err);
         }
-    }, [setOnRec]);
+    }, [setOnRec, setMedia, setStream, audioContextRef, sourceRef]);
 
     const stopRecording = useCallback((mediaRecorder, source) => {
         mediaRecorder.ondataavailable = async (e) => {
@@ -81,14 +81,14 @@ const Record = ({
                 setOnRec(false);
             });
         }
-    }, [stream, setOnRec]);
+    }, [stream, setOnRec, setAudioUrl, audioContextRef]);
 
     // 녹음 중지
     const offRecAudio = useCallback(() => {
         if (!onRec) return;
         handleProgressTimeUp();
         stopRecording(media, sourceRef.current);
-    }, [onRec, media, stopRecording, handleProgressTimeUp]);
+    }, [onRec, media, stopRecording, handleProgressTimeUp, sourceRef]);
 
 
     const sendAudioFile = useCallback(async (sound) => {
