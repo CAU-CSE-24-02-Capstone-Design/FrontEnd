@@ -22,21 +22,19 @@ const ProgressTimer = ({duration, onTimeUp}) => {
     useEffect(() => {
         const interval = setInterval(() => {
             setProgress((prev) => {
-                const newProgress = prev - 100 / (duration * 60); // 1초마다 게이지 감소
+                const newProgress = prev - 100 / (duration * 60);
                 return newProgress > 0 ? newProgress : 0;
             });
         }, 1000);
 
-        const timeout = setTimeout(() => {
-            clearInterval(interval); // 게이지가 0이 되기 전에 타이머 종료
-            onTimeUp(); // 타이머 종료 후 콜백 실행
-        }, duration * 60 * 1000);
+        return () => clearInterval(interval);
+    }, [duration]);
 
-        return () => {
-            clearInterval(interval);
-            clearTimeout(timeout);
-        };
-    }, [duration, onTimeUp]);
+    useEffect(() => {
+        if (progress <= 0) {
+            onTimeUp();
+        }
+    }, [progress, onTimeUp]);
 
     return (
         <div className="w-5/6 h-6 mt-8 rounded-xl bg-grayscale-30">
