@@ -15,7 +15,6 @@ const Record = ({
     // const {stream, setStream, media, setMedia, audioUrl, setAudioUrl, audioContextRef, sourceRef} = audioRecorder;
     const [stream, setStream] = useState(null); // 마이크에서 가져온 오디오 스트림을 저장
     const [media, setMedia] = useState(null); // MediaRecorder 객체를 저장하여 녹음을 관리
-    const [audioUrl, setAudioUrl] = useState(null); // 녹음된 오디오 데이터를 Blob으로 저장
     const audioContextRef = useRef(null); // AudioContext 참조
     const sourceRef = useRef(null); // MediaStreamSource 참조
 
@@ -82,7 +81,7 @@ const Record = ({
         }
     }, [answerId, questionText, onResponse]); // 필요한 의존성 추가
 
-    const onSubmitAudioFile = useCallback(async () => {
+    const onSubmitAudioFile = useCallback(async (audioUrl) => {
         if (audioUrl) {
             const sound = new File([audioUrl], "soundBlob.wav", {
                 lastModified: new Date().getTime(),
@@ -91,7 +90,7 @@ const Record = ({
             console.log(sound); // File 정보 출력
             await sendAudioFile(sound);
         }
-    }, [audioUrl, sendAudioFile]);
+    }, [sendAudioFile]);
 
     const stopRecording = useCallback((mediaRecorder, source) => {
         mediaRecorder.ondataavailable = async (e) => {
@@ -99,8 +98,8 @@ const Record = ({
                 const wavBlob = await getWaveBlob(e.data, true);
                 console.log("변환 데이터: ", wavBlob);
 
-                setAudioUrl(wavBlob);
                 setOnRec(false);
+                onSubmitAudioFile(wavBlob);
             }
         };
 
@@ -116,7 +115,7 @@ const Record = ({
                 setOnRec(false);
             });
         }
-    }, [stream, setOnRec]);
+    }, [stream, setOnRec, onSubmitAudioFile]);
 
     // 녹음 중지
     const offRecAudio = useCallback(() => {
@@ -133,12 +132,6 @@ const Record = ({
             offRecAudio();
         }
     }, [onRec, isRecording, onRecAudio, offRecAudio])
-
-    useEffect(() => {
-        if (audioUrl) {
-            onSubmitAudioFile();
-        }
-    }, [audioUrl, onSubmitAudioFile])
 
     return (
         <>
