@@ -50,7 +50,7 @@ const Record = ({isRecording, onRec, setOnRec, answerId, questionText, onRespons
         } catch (err) {
             console.error("Error accessing audio stream:", err);
         }
-    }, []);
+    }, [setOnRec]);
 
     const stopRecording = useCallback((mediaRecorder, source) => {
         mediaRecorder.ondataavailable = async (e) => {
@@ -73,7 +73,7 @@ const Record = ({isRecording, onRec, setOnRec, answerId, questionText, onRespons
                 audioContextRef.current = null; // AudioContext를 닫은 후 null로 설정
             });
         }
-    }, [stream]);
+    }, [stream, setOnRec]);
 
     // 녹음 중지
     const offRecAudio = useCallback(() => {
