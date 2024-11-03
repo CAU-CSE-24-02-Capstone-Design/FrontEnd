@@ -21,6 +21,7 @@ const Main = () => {
     const [showAnalysisMessage, setShowAnalysisMessage] = useState(false);
     const [loading, setLoading] = useState(false);
 
+    const [onRec, setOnRec] = useState(false);
     const [answerId, setAnswerId] = useState("");
     const [aiResponse, setAiResponse] = useState("");
     const [questionText, setQuestionText] = useState("");
@@ -93,6 +94,8 @@ const Main = () => {
                         <ProgressTimer duration={0.25} onTimeUp={handleProgressTimeUp}/>
                         <Record
                             isRecording={isRecording}
+                            onRec={onRec}
+                            setOnRec={setOnRec}
                             answerId={answerId}
                             questionText={questionText}
                             onResponse={(response) => setAiResponse(response)}

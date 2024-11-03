@@ -3,10 +3,9 @@ import {getWaveBlob} from "webm-to-wav-converter";
 import {FASTAPI_API_URL} from "../../../constants/api";
 import instance from "../../../axios/TokenInterceptor";
 
-const Record = ({isRecording, answerId, questionText, onResponse, handleProgressTimeUp}) => {
+const Record = ({isRecording, onRec, setOnRec, answerId, questionText, onResponse, handleProgressTimeUp}) => {
     const [stream, setStream] = useState(null); // 마이크에서 가져온 오디오 스트림을 저장
     const [media, setMedia] = useState(null); // MediaRecorder 객체를 저장하여 녹음을 관리
-    const [onRec, setOnRec] = useState(false);
     const [audioUrl, setAudioUrl] = useState(null); // 녹음된 오디오 데이터를 Blob으로 저장
     const audioContextRef = useRef(null); // AudioContext 참조
     const sourceRef = useRef(null); // MediaStreamSource 참조
@@ -116,12 +115,12 @@ const Record = ({isRecording, answerId, questionText, onResponse, handleProgress
     }, [audioUrl, sendAudioFile]); // sendAudioFile이 useCallback으로 래핑되었으므로 종속성 배열에 추가
 
     useEffect(() => {
-        if (isRecording) {
+        if (!onRec && isRecording) {
             onRecAudio();
-        } else {
+        } else if (onRec && !isRecording) {
             offRecAudio();
         }
-    }, [isRecording, onRecAudio, offRecAudio])
+    }, [onRec, isRecording, onRecAudio, offRecAudio])
 
     return (
         <>
