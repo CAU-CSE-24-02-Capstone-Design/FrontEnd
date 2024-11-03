@@ -92,7 +92,7 @@ const Main = () => {
 
                 {showProgressTimer && (
                     <>
-                        <ProgressTimer duration={0.25} onTimeUp={handleProgressTimeUp}/>
+                        <ProgressTimer duration={1} onTimeUp={handleProgressTimeUp}/>
                         <Record
                             isRecording={isRecording}
                             onRec={onRec}

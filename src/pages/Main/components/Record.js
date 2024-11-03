@@ -70,6 +70,7 @@ const Record = ({isRecording, onRec, setOnRec, answerId, questionText, onRespons
         if (audioContextRef.current) {
             audioContextRef.current.close().then(() => {
                 audioContextRef.current = null; // AudioContext를 닫은 후 null로 설정
+                console.log("멈추는거 맞음?");
                 setOnRec(false);
             });
         }
@@ -96,14 +97,12 @@ const Record = ({isRecording, onRec, setOnRec, answerId, questionText, onRespons
                 }
             );
             console.log(response.data);
-
             onResponse(response.data.insight);
-            handleProgressTimeUp();
 
         } catch (error) {
             console.error("인사이트 받아오기 실패");
         }
-    }, [answerId, questionText, onResponse, handleProgressTimeUp]); // 필요한 의존성 추가
+    }, [answerId, questionText, onResponse]); // 필요한 의존성 추가
 
     const onSubmitAudioFile = useCallback(async () => {
         if (audioUrl) {
@@ -112,9 +111,10 @@ const Record = ({isRecording, onRec, setOnRec, answerId, questionText, onRespons
                 type: "audio/wave",
             });
             console.log(sound); // File 정보 출력
+            handleProgressTimeUp();
             await sendAudioFile(sound);
         }
-    }, [audioUrl, sendAudioFile]); // sendAudioFile이 useCallback으로 래핑되었으므로 종속성 배열에 추가
+    }, [audioUrl, sendAudioFile, handleProgressTimeUp]); // sendAudioFile이 useCallback으로 래핑되었으므로 종속성 배열에 추가
 
     useEffect(() => {
         if (!onRec && isRecording) {

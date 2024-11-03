@@ -12,7 +12,7 @@ const AISpeechPopup = ({isOpen, onClose, response}) => {
                         <p key={index} className="mb-2">{item}</p> // 각 문자열을 단락으로 렌더링
                     ))
                 ) : (
-                    <p>응답이 없습니다.</p>
+                    <p>AI가 새로운 답변을 생성하는 중입니다!.</p>
                 )}
                 <button
                     onClick={onClose}
