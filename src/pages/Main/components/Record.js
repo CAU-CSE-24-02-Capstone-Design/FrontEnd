@@ -5,8 +5,6 @@ import instance from "../../../axios/TokenInterceptor";
 
 const Record = ({
                     isRecording,
-                    onRec,
-                    setOnRec,
                     answerId,
                     questionText,
                     onResponse,
@@ -54,8 +52,6 @@ const Record = ({
             if (e.data && e.data.size > 0) {
                 const wavBlob = await getWaveBlob(e.data, true);
                 console.log("변환 데이터: ", wavBlob);
-
-                setOnRec(false);
                 await onSubmitAudioFile(wavBlob);
             }
         };
@@ -69,10 +65,9 @@ const Record = ({
             audioContextRef.current.close().then(() => {
                 audioContextRef.current = null; // AudioContext를 닫은 후 null로 설정
                 console.log("멈추는거 맞음?");
-                setOnRec(false);
             });
         }
-    }, [stream, setOnRec, onSubmitAudioFile]);
+    }, [stream, onSubmitAudioFile]);
 
     // 녹음 시작
     const onRecAudio = useCallback(async () => {
@@ -91,7 +86,6 @@ const Record = ({
             mediaRecorder.start();
             setStream(stream);
             setMedia(mediaRecorder);
-            setOnRec(true);
 
             const source = audioContextRef.current.createMediaStreamSource(stream);
             sourceRef.current = source;
@@ -106,27 +100,26 @@ const Record = ({
         } catch (err) {
             console.error("Error accessing audio stream:", err);
         }
-    }, [setOnRec]);
+    }, []);
 
     // 녹음 중지
     const offRecAudio = useCallback(() => {
-        if (!onRec) return;
         handleProgressTimeUp();
         stopRecording(media, sourceRef.current);
-    }, [onRec, media, stopRecording, handleProgressTimeUp]);
+    }, [media, stopRecording, handleProgressTimeUp]);
 
 
     useEffect(() => {
-        console.log("onRec : ", onRec, ", isRecording : ", isRecording);
-        if (!onRec && isRecording) {
-            console.log("녹음 시작 : ", "onRec : ", onRec, ", isRecording : ", isRecording);
+        console.log(", isRecording : ", isRecording);
+        if (isRecording) {
+            console.log("녹음 시작 : ", "isRecording : ", isRecording);
             onRecAudio();
         }
-        else if (onRec && !isRecording) {
-            console.log("녹음 종료 : ", "onRec : ", onRec, ", isRecording : ", isRecording);
+        else if (!isRecording) {
+            console.log("녹음 종료 : ", "isRecording : ", isRecording);
             offRecAudio();
         }
-    }, [onRec, isRecording, onRecAudio, offRecAudio])
+    }, [isRecording, onRecAudio, offRecAudio])
 
     return (
         <>
