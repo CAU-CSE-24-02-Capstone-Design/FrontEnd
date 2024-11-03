@@ -1,9 +1,9 @@
-import React, {useCallback, useRef, useState} from "react";
+import React, {useCallback, useEffect, useRef, useState} from "react";
 import {getWaveBlob} from "webm-to-wav-converter";
-import {FASTAPI_API_URL} from "../constants/api";
-import instance from "../axios/TokenInterceptor";
+import {FASTAPI_API_URL} from "../../../constants/api";
+import instance from "../../../axios/TokenInterceptor";
 
-const Record = ({answerId, questionText, onResponse}) => {
+const Record = ({isRecording, answerId, questionText, onResponse}) => {
     const [stream, setStream] = useState(null); // 마이크에서 가져온 오디오 스트림을 저장
     const [media, setMedia] = useState(null); // MediaRecorder 객체를 저장하여 녹음을 관리
     const [onRec, setOnRec] = useState(true); // 녹음 중인지 여부를 추적
@@ -60,9 +60,6 @@ const Record = ({answerId, questionText, onResponse}) => {
     const stopRecording = (mediaRecorder, source) => {
         mediaRecorder.ondataavailable = async (e) => {
             if (e.data && e.data.size > 0) {
-                const webmUrl = URL.createObjectURL(e.data);
-                alert(webmUrl);
-                console.log("녹음된 데이터:", e.data);
                 const wavBlob = await getWaveBlob(e.data, true);
                 console.log("변환 데이터: ", wavBlob);
 
@@ -97,10 +94,7 @@ const Record = ({answerId, questionText, onResponse}) => {
                 }
             );
 
-            console.log(response.data.result.insight);
             onResponse(response.data.result.insight);
-
-            // navigate
         } catch (error) {
             console.error("인사이트 받아오기 실패");
         }
@@ -117,12 +111,28 @@ const Record = ({answerId, questionText, onResponse}) => {
         }
     }, [audioUrl, sendAudioFile]); // sendAudioFile이 useCallback으로 래핑되었으므로 종속성 배열에 추가
 
+    useEffect(() => {
+        if (isRecording) {
+            onRecAudio();
+        } else {
+            offRecAudio();
+        }
+    }, [isRecording])
+
     return (
         <>
-            <button onClick={onRec ? onRecAudio : offRecAudio}>
-                {onRec ? "녹음 시작" : "녹음 중지"}
+            <button
+                onClick={offRecAudio}
+                className="px-8 py-3 mt-10 text-lg font-semibold text-white rounded-full bg-primary-50"
+            >
+                녹음 완료
             </button>
-            <button onClick={onSubmitAudioFile}>다음 페이지로</button>
+            <button
+                onClick={onSubmitAudioFile}
+                className="px-8 py-3 mt-10 text-lg font-semibold text-white rounded-full bg-primary-50"
+            >
+                피드백 받기
+            </button>
         </>
     );
 };

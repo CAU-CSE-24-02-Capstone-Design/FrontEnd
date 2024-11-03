@@ -4,7 +4,7 @@ import NavBar from "../../components/NavBar";
 import Countdown from "./components/Countdown";
 import Question from "./components/Question";
 import ProgressTimer from "./components/ProgressTimer";
-import Record from "../../components/Record";
+import Record from "./components/Record";
 import VolumeVisualizer from "./components/VolumeVisualizer";
 import AISpeechPopup from "./components/AISpeechPopup";
 import {ClockLoader} from "react-spinners"; // 로딩중 효과 (ClockLoader)
@@ -57,7 +57,7 @@ const Main = () => {
         setIsRecording(false); // 녹음 중지
         setLoading(true); // 로딩 시작
         setShowAnalysisMessage(true); // 분석 메시지 표시
-    }
+    };
 
     const handleCloseAISpeechPopup = () => {
         setShowAISpeechPopup(false); // 팝업 닫기
@@ -92,6 +92,7 @@ const Main = () => {
                     <>
                         <ProgressTimer duration={0.25} onTimeUp={handleProgressTimeUp}/>
                         <Record
+                            isRecording={isRecording}
                             answerId={answerId}
                             questionText={questionText}
                             onResponse={(response) => setAiResponse(response)}

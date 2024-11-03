@@ -6,9 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="b5dda6d2-e76f-446c-9c6c-4e3d50c35be1" name="Changes" comment="fix: nginx swagger 경로 수정">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Record.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Record.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/constants/api.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/constants/api.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Login/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Login/index.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,7 +34,7 @@
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;dev&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;feat/refactor&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;C:/Users/YJG/Desktop/capstone/FrontEnd&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
@@ -113,6 +110,8 @@
       <workItem from="1729751654242" duration="12954000" />
       <workItem from="1729921835614" duration="2259000" />
       <workItem from="1730175307519" duration="948000" />
+      <workItem from="1730433669683" duration="6000" />
+      <workItem from="1730434206526" duration="600000" />
     </task>
     <task id="LOCAL-00001" summary="fix: nginx swagger 경로 추가">
       <option name="closed" value="true" />
