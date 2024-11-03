@@ -138,7 +138,7 @@ const Record = ({
         if (audioUrl) {
             onSubmitAudioFile();
         }
-    }, [audioUrl])
+    }, [audioUrl, onSubmitAudioFile])
 
     return (
         <>
