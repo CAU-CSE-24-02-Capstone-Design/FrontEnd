@@ -59,7 +59,6 @@ const Record = ({isRecording, onRec, setOnRec, answerId, questionText, onRespons
                 console.log("변환 데이터: ", wavBlob);
 
                 setAudioUrl(wavBlob);
-                setOnRec(false);
             }
         };
 
@@ -71,6 +70,7 @@ const Record = ({isRecording, onRec, setOnRec, answerId, questionText, onRespons
         if (audioContextRef.current) {
             audioContextRef.current.close().then(() => {
                 audioContextRef.current = null; // AudioContext를 닫은 후 null로 설정
+                setOnRec(false);
             });
         }
     }, [stream, setOnRec]);
@@ -86,7 +86,7 @@ const Record = ({isRecording, onRec, setOnRec, answerId, questionText, onRespons
         try {
             const formData = new FormData();
             formData.append("file", sound);
-            formData.append("answerId", answerId);
+            formData.append("answerId", parseInt(answerId, 10));
             formData.append("question", questionText);
             const response = await instance.post(
                 `${FASTAPI_API_URL}/record/insight`,
