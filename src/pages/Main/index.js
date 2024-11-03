@@ -55,11 +55,11 @@ const Main = () => {
 
     const handleProgressTimeUp = async () => {
         setShowProgressTimer(false);
-        setIsRecording(false); // 녹음 중지
-        setOnRec(true);
         setLoading(true); // 로딩 시작
         setShowAnalysisMessage(true); // 분석 메시지 표시
 
+        setIsRecording(false); // 녹음 중지
+        // setOnRec(true);
         console.log("Progress time up -", "onRec : ", onRec, ", isRecording : ", isRecording);
     };
 

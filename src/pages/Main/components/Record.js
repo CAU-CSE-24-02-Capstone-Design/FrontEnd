@@ -103,14 +103,14 @@ const Record = ({
             );
             source.connect(workletNode).connect(audioContextRef.current.destination);
 
-            workletNode.port.onmessage = (event) => {
-                const {currentTime} = event.data;
-                if (currentTime > 15) {
-                    // 1분 후 자동 정지 ...
-                    handleProgressTimeUp();
-                    stopRecording(mediaRecorder, source);
-                }
-            };
+            // workletNode.port.onmessage = (event) => {
+            //     const {currentTime} = event.data;
+            //     if (currentTime > 15) {
+            //         // 1분 후 자동 정지 ...
+            //         handleProgressTimeUp();
+            //         stopRecording(mediaRecorder, source);
+            //     }
+            // };
 
         } catch (err) {
             console.error("Error accessing audio stream:", err);
@@ -131,10 +131,10 @@ const Record = ({
             console.log("녹음 시작 : ", "onRec : ", onRec, ", isRecording : ", isRecording);
             onRecAudio();
         }
-        // else if (onRec && !isRecording) {
-        //     console.log("녹음 종료 : ", "onRec : ", onRec, ", isRecording : ", isRecording);
-        //     offRecAudio();
-        // }
+        else if (onRec && !isRecording) {
+            console.log("녹음 종료 : ", "onRec : ", onRec, ", isRecording : ", isRecording);
+            offRecAudio();
+        }
     }, [onRec, isRecording, onRecAudio, offRecAudio])
 
     return (
