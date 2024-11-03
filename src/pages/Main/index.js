@@ -59,6 +59,8 @@ const Main = () => {
         setOnRec(true);
         setLoading(true); // 로딩 시작
         setShowAnalysisMessage(true); // 분석 메시지 표시
+
+        console.log("Progress time up - isRecording:", false, "onRec:", true);
     };
 
     const handleCloseAISpeechPopup = () => {
@@ -92,7 +94,7 @@ const Main = () => {
 
                 {showProgressTimer && (
                     <>
-                        <ProgressTimer duration={1} onTimeUp={handleProgressTimeUp}/>
+                        <ProgressTimer duration={0.25} onTimeUp={handleProgressTimeUp}/>
                         <Record
                             isRecording={isRecording}
                             onRec={onRec}
