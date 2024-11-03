@@ -95,6 +95,7 @@ const Record = ({isRecording, onRec, setOnRec, answerId, questionText, onRespons
                     headers: {"Content-Type": "multipart/form-data"},
                 }
             );
+            console.log(response.data.result.insight);
 
             onResponse(response.data.result.insight);
             handleProgressTimeUp();
