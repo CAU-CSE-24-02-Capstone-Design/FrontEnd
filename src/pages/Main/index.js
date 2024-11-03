@@ -22,6 +22,7 @@ const Main = () => {
     const [showAnalysisMessage, setShowAnalysisMessage] = useState(false);
     const [loading, setLoading] = useState(false);
 
+    const [onRec, setOnRec] = useState(false);
     const [answerId, setAnswerId] = useState("");
     const [aiResponse, setAiResponse] = useState("");
     const [questionText, setQuestionText] = useState("");
@@ -56,10 +57,11 @@ const Main = () => {
     const handleProgressTimeUp = async () => {
         setShowProgressTimer(false);
         setIsRecording(false); // 녹음 중지
+        setOnRec(true);
         setLoading(true); // 로딩 시작
         setShowAnalysisMessage(true); // 분석 메시지 표시
 
-        console.log(isRecording);
+        console.log("Progress time up -", "onRec : ", onRec, ", isRecording : ", isRecording);
     };
 
     const handleCloseAISpeechPopup = () => {
@@ -96,6 +98,8 @@ const Main = () => {
                         <ProgressTimer duration={0.25} onTimeUp={handleProgressTimeUp}/>
                         <Record
                             isRecording={isRecording}
+                            onRec={onRec}
+                            setOnRec={setOnRec}
                             answerId={answerId}
                             questionText={questionText}
                             onResponse={(response) => setAiResponse(response)}
