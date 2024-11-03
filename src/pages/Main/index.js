@@ -60,7 +60,7 @@ const Main = () => {
         setLoading(true); // 로딩 시작
         setShowAnalysisMessage(true); // 분석 메시지 표시
 
-        console.log("Progress time up - isRecording:", false, "onRec:", true);
+        console.log("Progress time up -", "onRec : ", onRec, ", isRecording : ", isRecording);
     };
 
     const handleCloseAISpeechPopup = () => {

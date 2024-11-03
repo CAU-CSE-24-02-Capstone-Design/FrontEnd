@@ -126,11 +126,12 @@ const Record = ({
 
 
     useEffect(() => {
+        console.log("onRec : ", onRec, ", isRecording : ", isRecording);
         if (!onRec && isRecording) {
-            console.log("녹음 시작", onRec, isRecording);
+            console.log("녹음 시작 : ", "onRec : ", onRec, ", isRecording : ", isRecording);
             onRecAudio();
         } else if (onRec && !isRecording) {
-            console.log("녹음 종료", onRec, isRecording);
+            console.log("녹음 종료 : ", "onRec : ", onRec, ", isRecording : ", isRecording);
             offRecAudio();
         }
     }, [onRec, isRecording, onRecAudio, offRecAudio])
