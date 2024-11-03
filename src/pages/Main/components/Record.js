@@ -17,49 +17,6 @@ const Record = ({
     const audioContextRef = useRef(null); // AudioContext 참조
     const sourceRef = useRef(null); // MediaStreamSource 참조
 
-    // 녹음 시작
-    const onRecAudio = useCallback(async () => {
-        if (audioContextRef.current) {
-            // AudioContext가 이미 존재하면 재사용
-            console.log("AudioContext already exists, reusing.");
-        } else {
-            // AudioContext가 없으면 새로 생성
-            audioContextRef.current = new (window.AudioContext ||
-                window.webkitAudioContext)();
-        }
-
-        try {
-            const stream = await navigator.mediaDevices.getUserMedia({audio: true});
-            const mediaRecorder = new MediaRecorder(stream);
-            mediaRecorder.start();
-            setStream(stream);
-            setMedia(mediaRecorder);
-            setOnRec(true);
-
-            const source = audioContextRef.current.createMediaStreamSource(stream);
-            sourceRef.current = source;
-
-            await audioContextRef.current.audioWorklet.addModule("processor.js");
-            const workletNode = new AudioWorkletNode(
-                audioContextRef.current,
-                "worklet-processor"
-            );
-            source.connect(workletNode).connect(audioContextRef.current.destination);
-
-            workletNode.port.onmessage = (event) => {
-                const {currentTime} = event.data;
-                if (currentTime > 60) {
-                    // 1분 후 자동 정지
-                    handleProgressTimeUp();
-                    stopRecording(mediaRecorder, source);
-                }
-            };
-
-        } catch (err) {
-            console.error("Error accessing audio stream:", err);
-        }
-    }, [setOnRec, handleProgressTimeUp]);
-
     const sendAudioFile = useCallback(async (sound) => {
         try {
             const formData = new FormData();
@@ -116,6 +73,49 @@ const Record = ({
             });
         }
     }, [stream, setOnRec, onSubmitAudioFile]);
+
+    // 녹음 시작
+    const onRecAudio = useCallback(async () => {
+        if (audioContextRef.current) {
+            // AudioContext가 이미 존재하면 재사용
+            console.log("AudioContext already exists, reusing.");
+        } else {
+            // AudioContext가 없으면 새로 생성
+            audioContextRef.current = new (window.AudioContext ||
+                window.webkitAudioContext)();
+        }
+
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({audio: true});
+            const mediaRecorder = new MediaRecorder(stream);
+            mediaRecorder.start();
+            setStream(stream);
+            setMedia(mediaRecorder);
+            setOnRec(true);
+
+            const source = audioContextRef.current.createMediaStreamSource(stream);
+            sourceRef.current = source;
+
+            await audioContextRef.current.audioWorklet.addModule("processor.js");
+            const workletNode = new AudioWorkletNode(
+                audioContextRef.current,
+                "worklet-processor"
+            );
+            source.connect(workletNode).connect(audioContextRef.current.destination);
+
+            workletNode.port.onmessage = (event) => {
+                const {currentTime} = event.data;
+                if (currentTime > 60) {
+                    // 1분 후 자동 정지
+                    handleProgressTimeUp();
+                    stopRecording(mediaRecorder, source);
+                }
+            };
+
+        } catch (err) {
+            console.error("Error accessing audio stream:", err);
+        }
+    }, [setOnRec, stopRecording, handleProgressTimeUp]);
 
     // 녹음 중지
     const offRecAudio = useCallback(() => {
