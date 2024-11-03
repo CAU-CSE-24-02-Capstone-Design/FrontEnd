@@ -105,8 +105,8 @@ const Record = ({
 
             workletNode.port.onmessage = (event) => {
                 const {currentTime} = event.data;
-                if (currentTime > 60) {
-                    // 1분 후 자동 정지
+                if (currentTime > 15) {
+                    // 1분 후 자동 정지 ...
                     handleProgressTimeUp();
                     stopRecording(mediaRecorder, source);
                 }
