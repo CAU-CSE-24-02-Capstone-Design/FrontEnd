@@ -11,6 +11,7 @@ import {ClockLoader} from "react-spinners"; // 로딩중 효과 (ClockLoader)
 import {SPRING_API_URL} from "../../constants/api";
 import instance from "../../axios/TokenInterceptor";
 import {useNavigate} from "react-router-dom";
+import AudioRecorder from "./hook/AudioRecorder";
 
 const Main = () => {
     const navigate = useNavigate();
@@ -25,6 +26,8 @@ const Main = () => {
     const [answerId, setAnswerId] = useState("");
     const [aiResponse, setAiResponse] = useState("");
     const [questionText, setQuestionText] = useState("");
+
+    const audioRecorder = AudioRecorder();
 
     const handleQuestionClick = async () => {
         try {
@@ -51,14 +54,19 @@ const Main = () => {
         setShowCountdown(false);
         setShowProgressTimer(true); // 1분 타이머 시작
         setIsRecording(true); // 녹음 시작
-    };
+    }
+
+    const handleMovePage = async () => {
+        setLoading(true); // 로딩 시작
+        setShowAnalysisMessage(true); // 분석 메시지 표시
+    }
 
     const handleProgressTimeUp = async () => {
         setShowProgressTimer(false);
         setIsRecording(false); // 녹음 중지
         setOnRec(true);
-        setLoading(true); // 로딩 시작
-        setShowAnalysisMessage(true); // 분석 메시지 표시
+        // setLoading(true); // 로딩 시작
+        // setShowAnalysisMessage(true); // 분석 메시지 표시
     };
 
     const handleCloseAISpeechPopup = () => {
@@ -92,7 +100,7 @@ const Main = () => {
 
                 {showProgressTimer && (
                     <>
-                        <ProgressTimer duration={1} onTimeUp={handleProgressTimeUp}/>
+                        <ProgressTimer duration={1} onTimeUp={[handleMovePage, handleProgressTimeUp]}/>
                         <Record
                             isRecording={isRecording}
                             onRec={onRec}
@@ -100,7 +108,9 @@ const Main = () => {
                             answerId={answerId}
                             questionText={questionText}
                             onResponse={(response) => setAiResponse(response)}
+                            handleMovePage={handleMovePage}
                             handleProgressTimeUp={handleProgressTimeUp}
+                            audioRecorder={audioRecorder}
                         />
                         <VolumeVisualizer isRecording={isRecording}/>
                     </>
