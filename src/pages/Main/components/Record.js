@@ -91,7 +91,7 @@ const Record = ({
             console.log(sound); // File 정보 출력
             await sendAudioFile(sound);
         }
-    }, [audioUrl, sendAudioFile]); // sendAudioFile이 useCallback으로 래핑되었으므로 종속성 배열에 추가
+    }, [audioUrl, sendAudioFile]);
 
     const stopRecording = useCallback((mediaRecorder, source) => {
         mediaRecorder.ondataavailable = async (e) => {
@@ -101,7 +101,6 @@ const Record = ({
 
                 setAudioUrl(wavBlob);
                 setOnRec(false);
-                await onSubmitAudioFile();
             }
         };
 
@@ -117,7 +116,7 @@ const Record = ({
                 setOnRec(false);
             });
         }
-    }, [stream, setOnRec, onSubmitAudioFile]);
+    }, [stream, setOnRec]);
 
     // 녹음 중지
     const offRecAudio = useCallback(() => {
@@ -134,6 +133,12 @@ const Record = ({
             offRecAudio();
         }
     }, [onRec, isRecording, onRecAudio, offRecAudio])
+
+    useEffect(() => {
+        if (audioUrl) {
+            onSubmitAudioFile();
+        }
+    }, [audioUrl])
 
     return (
         <>
