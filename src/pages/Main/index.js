@@ -95,7 +95,7 @@ const Main = () => {
 
                 {showProgressTimer && (
                     <>
-                        <ProgressTimer duration={1} onTimeUp={[handleMovePage, handleProgressTimeUp]}/>
+                        <ProgressTimer duration={1} onTimeUp={handleProgressTimeUp}/>
                         <Record
                             isRecording={isRecording}
                             onRec={onRec}

@@ -9,11 +9,7 @@ const ProgressTimer = ({duration, onTimeUp}) => {
                 const newProgress = prev - 100 / (duration * 60); // 1초마다 게이지 감소
                 if (newProgress <= 0) {
                     clearInterval(interval);
-                    if (Array.isArray(onTimeUp)) {
-                        onTimeUp.forEach((callback) => callback());
-                    } else {
-                        onTimeUp();
-                    }
+                    onTimeUp();
                     return 0;
                 }
                 return newProgress;
