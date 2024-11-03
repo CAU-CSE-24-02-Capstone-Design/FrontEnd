@@ -103,19 +103,10 @@ const Record = ({
             );
             source.connect(workletNode).connect(audioContextRef.current.destination);
 
-            // workletNode.port.onmessage = (event) => {
-            //     const {currentTime} = event.data;
-            //     if (currentTime > 15) {
-            //         // 1분 후 자동 정지 ...
-            //         handleProgressTimeUp();
-            //         stopRecording(mediaRecorder, source);
-            //     }
-            // };
-
         } catch (err) {
             console.error("Error accessing audio stream:", err);
         }
-    }, [setOnRec, stopRecording, handleProgressTimeUp]);
+    }, [setOnRec]);
 
     // 녹음 중지
     const offRecAudio = useCallback(() => {
