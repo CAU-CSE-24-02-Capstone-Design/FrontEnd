@@ -99,7 +99,7 @@ const Record = ({
                 console.log("변환 데이터: ", wavBlob);
 
                 setOnRec(false);
-                onSubmitAudioFile(wavBlob);
+                await onSubmitAudioFile(wavBlob);
             }
         };
 

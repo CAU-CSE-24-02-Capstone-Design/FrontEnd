@@ -3,20 +3,39 @@ import React, {useEffect, useState} from "react";
 const ProgressTimer = ({duration, onTimeUp}) => {
     const [progress, setProgress] = useState(100); // 초기 게이지를 100%로 설정
 
+    // useEffect(() => {
+    //     const interval = setInterval(() => {
+    //         setProgress((prev) => {
+    //             const newProgress = prev - 100 / (duration * 60); // 1초마다 게이지 감소
+    //             if (newProgress <= 0) {
+    //                 clearInterval(interval);
+    //                 onTimeUp();
+    //                 return 0;
+    //             }
+    //             return newProgress;
+    //         });
+    //     }, 1000);
+    //
+    //     return () => clearInterval(interval);
+    // }, [duration, onTimeUp]);
+
     useEffect(() => {
         const interval = setInterval(() => {
             setProgress((prev) => {
                 const newProgress = prev - 100 / (duration * 60); // 1초마다 게이지 감소
-                if (newProgress <= 0) {
-                    clearInterval(interval);
-                    onTimeUp();
-                    return 0;
-                }
-                return newProgress;
+                return newProgress > 0 ? newProgress : 0;
             });
         }, 1000);
 
-        return () => clearInterval(interval);
+        const timeout = setTimeout(() => {
+            clearInterval(interval); // 게이지가 0이 되기 전에 타이머 종료
+            onTimeUp(); // 타이머 종료 후 콜백 실행
+        }, duration * 60 * 1000);
+
+        return () => {
+            clearInterval(interval);
+            clearTimeout(timeout);
+        };
     }, [duration, onTimeUp]);
 
     return (
