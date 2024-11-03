@@ -53,14 +53,7 @@ const Record = ({isRecording, answerId, questionText, onResponse, handleProgress
         }
     }, []);
 
-    // 녹음 중지
-    const offRecAudio = useCallback(() => {
-        if (!onRec) return;
-        stopRecording(media, sourceRef.current);
-        handleProgressTimeUp();
-    }, [onRec, media, handleProgressTimeUp]);
-
-    const stopRecording = (mediaRecorder, source) => {
+    const stopRecording = useCallback((mediaRecorder, source) => {
         mediaRecorder.ondataavailable = async (e) => {
             if (e.data && e.data.size > 0) {
                 const wavBlob = await getWaveBlob(e.data, true);
@@ -81,7 +74,15 @@ const Record = ({isRecording, answerId, questionText, onResponse, handleProgress
                 audioContextRef.current = null; // AudioContext를 닫은 후 null로 설정
             });
         }
-    };
+    }, [stream]);
+
+    // 녹음 중지
+    const offRecAudio = useCallback(() => {
+        if (!onRec) return;
+        stopRecording(media, sourceRef.current);
+        handleProgressTimeUp();
+    }, [onRec, media, stopRecording, handleProgressTimeUp]);
+
 
     const sendAudioFile = useCallback(async (sound) => {
         try {
