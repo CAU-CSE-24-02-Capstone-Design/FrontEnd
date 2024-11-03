@@ -10,7 +10,6 @@ const Record = ({
                     answerId,
                     questionText,
                     onResponse,
-                    handleMovePage,
                     handleProgressTimeUp,
                     audioRecorder
                 }) => {
@@ -58,39 +57,6 @@ const Record = ({
         }
     }, [setOnRec, setMedia, setStream, audioContextRef, sourceRef]);
 
-    const stopRecording = useCallback((mediaRecorder, source) => {
-        mediaRecorder.ondataavailable = async (e) => {
-            if (e.data && e.data.size > 0) {
-                const wavBlob = await getWaveBlob(e.data, true);
-                console.log("변환 데이터: ", wavBlob);
-
-                setAudioUrl(wavBlob);
-                setOnRec(false);
-            }
-        };
-
-        stream.getAudioTracks().forEach((track) => track.stop());
-        mediaRecorder.stop();
-        source.disconnect();
-
-        // AudioContext가 열려있는지 확인 후 닫기
-        if (audioContextRef.current) {
-            audioContextRef.current.close().then(() => {
-                audioContextRef.current = null; // AudioContext를 닫은 후 null로 설정
-                console.log("멈추는거 맞음?");
-                setOnRec(false);
-            });
-        }
-    }, [stream, setOnRec, setAudioUrl, audioContextRef]);
-
-    // 녹음 중지
-    const offRecAudio = useCallback(() => {
-        if (!onRec) return;
-        handleProgressTimeUp();
-        stopRecording(media, sourceRef.current);
-    }, [onRec, media, stopRecording, handleProgressTimeUp, sourceRef]);
-
-
     const sendAudioFile = useCallback(async (sound) => {
         try {
             const formData = new FormData();
@@ -119,10 +85,43 @@ const Record = ({
                 type: "audio/wave",
             });
             console.log(sound); // File 정보 출력
-            handleMovePage();
             await sendAudioFile(sound);
         }
-    }, [audioUrl, sendAudioFile, handleMovePage]); // sendAudioFile이 useCallback으로 래핑되었으므로 종속성 배열에 추가
+    }, [audioUrl, sendAudioFile]); // sendAudioFile이 useCallback으로 래핑되었으므로 종속성 배열에 추가
+
+    const stopRecording = useCallback((mediaRecorder, source) => {
+        mediaRecorder.ondataavailable = async (e) => {
+            if (e.data && e.data.size > 0) {
+                const wavBlob = await getWaveBlob(e.data, true);
+                console.log("변환 데이터: ", wavBlob);
+
+                setAudioUrl(wavBlob);
+                setOnRec(false);
+                await onSubmitAudioFile();
+            }
+        };
+
+        stream.getAudioTracks().forEach((track) => track.stop());
+        mediaRecorder.stop();
+        source.disconnect();
+
+        // AudioContext가 열려있는지 확인 후 닫기
+        if (audioContextRef.current) {
+            audioContextRef.current.close().then(() => {
+                audioContextRef.current = null; // AudioContext를 닫은 후 null로 설정
+                console.log("멈추는거 맞음?");
+                setOnRec(false);
+            });
+        }
+    }, [stream, setOnRec, setAudioUrl, audioContextRef, onSubmitAudioFile]);
+
+    // 녹음 중지
+    const offRecAudio = useCallback(() => {
+        if (!onRec) return;
+        handleProgressTimeUp();
+        stopRecording(media, sourceRef.current);
+    }, [onRec, media, stopRecording, handleProgressTimeUp, sourceRef]);
+
 
     useEffect(() => {
         if (!onRec && isRecording) {
@@ -139,12 +138,6 @@ const Record = ({
                 className="px-8 py-3 mt-10 text-lg font-semibold text-white rounded-full bg-primary-50"
             >
                 녹음 완료
-            </button>
-            <button
-                onClick={onSubmitAudioFile}
-                className="px-8 py-3 mt-10 text-lg font-semibold text-white rounded-full bg-primary-50"
-            >
-                피드백 받기
             </button>
         </>
     );
