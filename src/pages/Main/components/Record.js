@@ -6,7 +6,6 @@ import instance from "../../../axios/TokenInterceptor";
 const Record = ({isRecording, answerId, questionText, onResponse}) => {
     const [stream, setStream] = useState(null); // 마이크에서 가져온 오디오 스트림을 저장
     const [media, setMedia] = useState(null); // MediaRecorder 객체를 저장하여 녹음을 관리
-    const [onRec, setOnRec] = useState(true); // 녹음 중인지 여부를 추적
     const [audioUrl, setAudioUrl] = useState(null); // 녹음된 오디오 데이터를 Blob으로 저장
     const audioContextRef = useRef(null); // AudioContext 참조
     const sourceRef = useRef(null); // MediaStreamSource 참조
@@ -117,7 +116,7 @@ const Record = ({isRecording, answerId, questionText, onResponse}) => {
         } else {
             offRecAudio();
         }
-    }, [isRecording])
+    }, [isRecording, onRecAudio, offRecAudio])
 
     return (
         <>
