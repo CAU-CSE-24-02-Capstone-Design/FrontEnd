@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import Header from "../../components/Header";
 import NavBar from "../../components/NavBar";
 import Countdown from "./components/Countdown";
