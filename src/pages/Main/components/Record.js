@@ -11,6 +11,7 @@ const Record = ({
                     questionText,
                     onResponse,
                     handleProgressTimeUp,
+                    handleStopRecording
                 }) => {
     const [stream, setStream] = useState(null); // 마이크에서 가져온 오디오 스트림을 저장
     const [media, setMedia] = useState(null); // MediaRecorder 객체를 저장하여 녹음을 관리
@@ -30,13 +31,12 @@ const Record = ({
                     headers: {"Content-Type": "multipart/form-data"},
                 }
             );
-            console.log(response.data);
             onResponse(response.data.insight);
 
         } catch (error) {
             console.error("인사이트 받아오기 실패");
         }
-    }, [answerId, questionText, onResponse]); // 필요한 의존성 추가
+    }, [answerId, questionText, onResponse]);
 
     const onSubmitAudioFile = useCallback(async (audioUrl) => {
         if (audioUrl) {
@@ -68,7 +68,6 @@ const Record = ({
         if (audioContextRef.current) {
             audioContextRef.current.close().then(() => {
                 audioContextRef.current = null; // AudioContext를 닫은 후 null로 설정
-                console.log("멈추는거 맞음?");
                 setOnRec(false);
             });
         }
@@ -113,8 +112,9 @@ const Record = ({
     const offRecAudio = useCallback(() => {
         if (!onRec) return;
         handleProgressTimeUp();
+        handleStopRecording();
         stopRecording(media, sourceRef.current);
-    }, [onRec, media, stopRecording, handleProgressTimeUp]);
+    }, [onRec, media, stopRecording, handleProgressTimeUp, handleStopRecording]);
 
 
     useEffect(() => {
@@ -122,8 +122,7 @@ const Record = ({
         if (!onRec && isRecording) {
             console.log("녹음 시작 : ", "onRec : ", onRec, ", isRecording : ", isRecording);
             onRecAudio();
-        }
-        else if (onRec && !isRecording) {
+        } else if (onRec && !isRecording) {
             console.log("녹음 종료 : ", "onRec : ", onRec, ", isRecording : ", isRecording);
             offRecAudio();
         }
