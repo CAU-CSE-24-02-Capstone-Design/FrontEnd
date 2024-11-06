@@ -22,10 +22,12 @@ const Main = () => {
     const [showAnalysisMessage, setShowAnalysisMessage] = useState(false);
     const [loading, setLoading] = useState(false);
 
+    const [audioUrl, setAudioUrl] = useState(null);
     const [onRec, setOnRec] = useState(false);
     const [answerId, setAnswerId] = useState("");
     const [aiResponse, setAiResponse] = useState("");
     const [questionText, setQuestionText] = useState("");
+
 
     const handleQuestionClick = async () => {
         try {
@@ -96,6 +98,7 @@ const Main = () => {
                     <>
                         <ProgressTimer duration={0.25} onTimeUp={handleStopRecording}/>
                         <Record
+                            setAudioUrl={setAudioUrl}
                             isRecording={isRecording}
                             onRec={onRec}
                             setOnRec={setOnRec}
@@ -111,6 +114,11 @@ const Main = () => {
 
                 {loading && (
                     <div className="flex flex-col items-center justify-center mt-4">
+                        {audioUrl && (
+                            <audio controls src={audioUrl} className="mb-4">
+                                Your browser does not support the audio element.
+                            </audio>
+                        )}
                         <p className="mb-10 text-xl font-semibold text-center text-grayscale-100">
                             답변 내용을 분석 중입니다.
                         </p>

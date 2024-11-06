@@ -4,6 +4,7 @@ import {FASTAPI_API_URL} from "../../../constants/api";
 import instance from "../../../axios/TokenInterceptor";
 
 const Record = ({
+                    setAudioUrl,
                     isRecording,
                     onRec,
                     setOnRec,
@@ -45,9 +46,10 @@ const Record = ({
                 type: "audio/wave",
             });
             console.log(sound); // File 정보 출력
+            setAudioUrl(URL.createObjectURL(sound)); // 변환된 URL 설정
             await sendAudioFile(sound);
         }
-    }, [sendAudioFile]);
+    }, [sendAudioFile, setAudioUrl]);
 
     const stopRecording = useCallback((mediaRecorder, source) => {
         mediaRecorder.ondataavailable = async (e) => {

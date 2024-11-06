@@ -125,7 +125,9 @@
       <workItem from="1730702515760" duration="597000" />
       <workItem from="1730738097204" duration="326000" />
       <workItem from="1730738426976" duration="3188000" />
-      <workItem from="1730821954080" duration="831000" />
+      <workItem from="1730821954080" duration="2200000" />
+      <workItem from="1730824230699" duration="145000" />
+      <workItem from="1730863515964" duration="365000" />
     </task>
     <task id="LOCAL-00001" summary="fix: nginx swagger 경로 추가">
       <option name="closed" value="true" />
