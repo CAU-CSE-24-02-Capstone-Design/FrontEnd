@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import {BrowserRouter, Route, Routes} from "react-router-dom";
 import Login from "./pages/Login";
 import KakaoRedirectPage from "./components/oauth/KakaoRedirectPage";
 import NaverRedirectPage from "./components/oauth/NaverRedirectPage";
@@ -11,43 +11,46 @@ import Statistics from "./pages/Statistics";
 import GuestRecord from "./pages/GuestRecord";
 import RecordScript from "./pages/RecordScript";
 import "./App.css";
+import {AnswerIdProvider} from "./context/AnswerIdContext";
 
 const App = () => {
-  return (
-    <div className="App">
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Login />} />
-          <Route
-            path="/login/oauth2/code/kakao"
-            element={<KakaoRedirectPage />}
-          />
-          <Route
-            path="/login/oauth2/code/naver"
-            element={<NaverRedirectPage />}
-          />
-          <Route
-            path="/login/oauth2/code/google"
-            element={<GoogleRedirectPage />}
-          />
-          <Route path="/main" element={<Main />} />
+    return (
+        <div className="App">
+            <AnswerIdProvider>
+                <BrowserRouter>
+                    <Routes>
+                        <Route path="/" element={<Login/>}/>
+                        <Route
+                            path="/login/oauth2/code/kakao"
+                            element={<KakaoRedirectPage/>}
+                        />
+                        <Route
+                            path="/login/oauth2/code/naver"
+                            element={<NaverRedirectPage/>}
+                        />
+                        <Route
+                            path="/login/oauth2/code/google"
+                            element={<GoogleRedirectPage/>}
+                        />
+                        <Route path="/main" element={<Main/>}/>
 
-          {/* Header의 마이페이지 경로 */}
-          <Route path="/mypage" element={<MyPage />} />
+                        {/* Header의 마이페이지 경로 */}
+                        <Route path="/mypage" element={<MyPage/>}/>
 
-          {/* NavBar의 탭 연결 페이지 경로 */}
-          <Route path="/calendar" element={<Calendar />} />
-          <Route path="/statistics" element={<Statistics />} />
+                        {/* NavBar의 탭 연결 페이지 경로 */}
+                        <Route path="/calendar" element={<Calendar/>}/>
+                        <Route path="/statistics" element={<Statistics/>}/>
 
-          {/* GuestRecord */}
-          <Route path="/guestrecord" element={<GuestRecord />} />
+                        {/* GuestRecord */}
+                        <Route path="/guestrecord" element={<GuestRecord/>}/>
 
-          {/* RecordScript */}
-          <Route path="/recordscript" element={<RecordScript />} />
-        </Routes>
-      </BrowserRouter>
-    </div>
-  );
+                        {/* RecordScript */}
+                        <Route path="/recordscript" element={<RecordScript/>}/>
+                    </Routes>
+                </BrowserRouter>
+            </AnswerIdProvider>
+        </div>
+    );
 };
 
 export default App;

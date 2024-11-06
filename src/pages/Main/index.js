@@ -11,6 +11,7 @@ import {ClockLoader} from "react-spinners"; // 로딩중 효과 (ClockLoader)
 import {SPRING_API_URL} from "../../constants/api";
 import instance from "../../axios/TokenInterceptor";
 import {useNavigate} from "react-router-dom";
+import {useAnswerIdContext} from "../../context/AnswerIdContext";
 
 const Main = () => {
     const navigate = useNavigate();
@@ -24,7 +25,7 @@ const Main = () => {
 
     const [audioUrl, setAudioUrl] = useState(null);
     const [onRec, setOnRec] = useState(false);
-    const [answerId, setAnswerId] = useState("");
+    const {answerId, setAnswerId} = useAnswerIdContext();
     const [aiResponse, setAiResponse] = useState("");
     const [questionText, setQuestionText] = useState("");
 
