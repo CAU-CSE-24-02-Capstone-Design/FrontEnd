@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from "react";
+import React, {useCallback, useState} from "react";
 import Header from "../../components/Header";
 import NavBar from "../../components/NavBar";
 import Countdown from "./components/Countdown";
@@ -56,6 +56,7 @@ const Main = () => {
             }
 
             setShowCountdown(true);
+            await getFeedback();
         };
 
         const handleCountdownComplete = () => {
@@ -101,10 +102,6 @@ const Main = () => {
                 console.error("데이터 받아오기 실패");
             }
         }, [answerId, setUserAudioUrl, setAiAudioUrl, setUserScript, setAiScript, setFeedback]);
-
-        useEffect(() => {
-            getFeedback();
-        }, [answerId, getFeedback]);
 
         return (
             <div className="w-full h-full max-w-[500px] mx-auto flex flex-col bg-[#fcfcfc]">
