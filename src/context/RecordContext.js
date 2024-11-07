@@ -5,6 +5,7 @@ const RecordContext = createContext();
 export const useRecordContext = () => useContext(RecordContext);
 
 export const RecordProvider = ({children}) => {
+    const [answerId, setAnswerId] = useState("");
     const [userAudioUrl, setUserAudioUrl] = useState(null);
     const [aiAudioUrl, setAiAudioUrl] = useState(null);
     const [userScript, setUserScript] = useState("");
@@ -13,6 +14,7 @@ export const RecordProvider = ({children}) => {
 
     return (
         <RecordContext.Provider value={{
+            answerId, setAnswerId,
             userAudioUrl, setUserAudioUrl,
             aiAudioUrl, setAiAudioUrl,
             userScript, setUserScript,
