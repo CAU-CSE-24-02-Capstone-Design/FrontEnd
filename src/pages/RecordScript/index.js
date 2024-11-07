@@ -1,47 +1,24 @@
-import React, {useCallback, useEffect, useState} from "react";
+import React, {useState} from "react";
 import {FaVolumeUp} from "react-icons/fa";
 import Header from "../../components/Header";
 import NavBar from "../../components/NavBar";
-import instance from "../../axios/TokenInterceptor";
-import {SPRING_API_URL} from "../../constants/api";
-import {useAnswerIdContext} from "../../context/AnswerIdContext";
+import {useRecordContext} from "../../context/RecordContext";
 
 // 스크립트 확인을 위한 임시 더미 데이터
 const RecordScript = ({selectedDate}) => {
-    const [userScript, setUserScript] = useState("");
-    const [aiScript, setAiScript] = useState("");
-    const [feedback, setFeedback] = useState("");
 
-    // answerId는 Context로 관리
-    const {answerId} = useAnswerIdContext();
-
-    // 임시 오디오 URL
-    const [userAudioUrl, setUserAudioUrl] = useState(null);
-    const [aiAudioUrl, setAiAudioUrl] = useState(null);
+    // feedback 관련 상태 전부 Context 관리
+    const {
+        userAudioUrl,
+        aiAudioUrl,
+        userScript,
+        aiScript,
+        feedback,
+    } = useRecordContext();
 
     const [isUserScriptOpen, setIsUserScriptOpen] = useState(false);
     const [isAiScriptOpen, setIsAiScriptOpen] = useState(false);
     const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
-
-    // 데이터 받아오기
-    const getUserData = useCallback(async () => {
-        try {
-            const response = await instance.get(
-                `${SPRING_API_URL}/feedback?answerId=${answerId}`
-            );
-            if (response.data.isSuccess) {
-                setUserAudioUrl(response.data.result.beforeAudioLink);
-                setAiAudioUrl(response.data.result.afterAudioLink);
-                setUserScript(response.data.result.beforeScript);
-                setAiScript(response.data.result.afterScript);
-                setFeedback(response.data.result.feedbackText);
-            } else {
-                console.error("데이터 api 오류");
-            }
-        } catch (error) {
-            console.error("데이터 받아오기 실패");
-        }
-    }, [answerId]);
 
     const playAudio = (audioUrl) => {
         const audio = new Audio(audioUrl);
@@ -51,10 +28,6 @@ const RecordScript = ({selectedDate}) => {
     const toggleUserScript = () => setIsUserScriptOpen(!isUserScriptOpen);
     const toggleAiScript = () => setIsAiScriptOpen(!isAiScriptOpen);
     const toggleFeedback = () => setIsFeedbackOpen(!isFeedbackOpen);
-
-    useEffect(() => {
-        getUserData();
-    }, [getUserData])
 
     return (
         <div className="flex flex-col items-center min-h-screen overflow-y-auto">
@@ -109,6 +82,7 @@ const RecordScript = ({selectedDate}) => {
                         <FaVolumeUp/>
                     </button>
                 </div>
+
 
                 {/* AI 피드백 */}
                 <div
