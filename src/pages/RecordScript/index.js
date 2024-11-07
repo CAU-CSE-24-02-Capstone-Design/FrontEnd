@@ -16,8 +16,8 @@ const RecordScript = ({selectedDate}) => {
     const {answerId} = useAnswerIdContext();
 
     // 임시 오디오 URL
-    const [userAudio, setUserAudio] = useState(null);
-    const [aiAudio, setAiAudio] = useState(null);
+    const [userAudioUrl, setUserAudioUrl] = useState(null);
+    const [aiAudioUrl, setAiAudioUrl] = useState(null);
 
     const [isUserScriptOpen, setIsUserScriptOpen] = useState(false);
     const [isAiScriptOpen, setIsAiScriptOpen] = useState(false);
@@ -30,8 +30,8 @@ const RecordScript = ({selectedDate}) => {
                 `${SPRING_API_URL}/feedback?answerId=${answerId}`
             );
             if (response.data.isSuccess) {
-                setUserAudio(response.data.result.beforeAudio);
-                setAiAudio(response.data.result.afterAudio);
+                setUserAudioUrl(response.data.result.beforeAudioLink);
+                setAiAudioUrl(response.data.result.afterAudioLink);
                 setUserScript(response.data.result.beforeScript);
                 setAiScript(response.data.result.afterScript);
                 setFeedback(response.data.result.feedbackText);
@@ -43,8 +43,7 @@ const RecordScript = ({selectedDate}) => {
         }
     }, [answerId]);
 
-    const playAudio = (audioFile) => {
-        const audioUrl = URL.createObjectURL(audioFile);  // 파일 객체를 URL로 변환
+    const playAudio = (audioUrl) => {
         const audio = new Audio(audioUrl);
         audio.play();
     };
@@ -79,7 +78,7 @@ const RecordScript = ({selectedDate}) => {
                     <button
                         onClick={(e) => {
                             e.stopPropagation();
-                            playAudio(userAudio);
+                            playAudio(userAudioUrl);
                         }}
                         className="absolute text-xl top-4 right-4"
                     >
@@ -103,7 +102,7 @@ const RecordScript = ({selectedDate}) => {
                     <button
                         onClick={(e) => {
                             e.stopPropagation();
-                            playAudio(aiAudio);
+                            playAudio(aiAudioUrl);
                         }}
                         className="absolute text-xl top-4 right-4"
                     >
