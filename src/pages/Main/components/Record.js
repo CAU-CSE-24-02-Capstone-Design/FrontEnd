@@ -1,7 +1,8 @@
 import React, {useCallback, useEffect, useRef, useState} from "react";
 import {getWaveBlob} from "webm-to-wav-converter";
-import {FASTAPI_API_URL} from "../../../constants/api";
+import {FASTAPI_API_URL, SPRING_API_URL} from "../../../constants/api";
 import instance from "../../../axios/TokenInterceptor";
+import {useRecordContext} from "../../../context/RecordContext";
 
 const Record = ({
                     setAudioUrl,
@@ -19,6 +20,33 @@ const Record = ({
     const audioContextRef = useRef(null); // AudioContext 참조
     const sourceRef = useRef(null); // MediaStreamSource 참조
 
+    const {
+        setUserAudioUrl,
+        setAiAudioUrl,
+        setUserScript,
+        setAiScript,
+        setFeedback,
+    } = useRecordContext();
+
+    const getFeedback = useCallback(async () => {
+        try {
+            const response = await instance.get(
+                `${SPRING_API_URL}/feedback?answerId=${answerId}`
+            );
+            if (response.data.isSuccess) {
+                setUserAudioUrl(response.data.result.beforeAudioLink);
+                setAiAudioUrl(response.data.result.afterAudioLink);
+                setUserScript(response.data.result.beforeScript);
+                setAiScript(response.data.result.afterScript);
+                setFeedback(response.data.result.feedbackText);
+            } else {
+                console.error("데이터 api 오류");
+            }
+        } catch (error) {
+            console.error("데이터 받아오기 실패");
+        }
+    }, [answerId, setUserAudioUrl, setAiAudioUrl, setUserScript, setAiScript, setFeedback]);
+
     const sendAudioFile = useCallback(async (sound) => {
         try {
             const formData = new FormData();
@@ -33,11 +61,12 @@ const Record = ({
                 }
             );
             onResponse(response.data.insight);
+            getFeedback();
 
         } catch (error) {
             console.error("인사이트 받아오기 실패");
         }
-    }, [answerId, questionText, onResponse]);
+    }, [answerId, questionText, onResponse, getFeedback]);
 
     const onSubmitAudioFile = useCallback(async (audioUrl) => {
         if (audioUrl) {
