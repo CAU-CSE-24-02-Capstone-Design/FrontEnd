@@ -9,6 +9,7 @@ import ProgressTimer from "./components/ProgressTimer";
 import Record from "./components/Record";
 import VolumeVisualizer from "./components/VolumeVisualizer";
 import AISpeechPopup from "./components/AISpeechPopup";
+import UserMemo from "./components/UserMemo";
 import { ClockLoader } from "react-spinners"; // 로딩중 효과 (ClockLoader)
 import { SPRING_API_URL } from "../../constants/api";
 import instance from "../../axios/TokenInterceptor";
@@ -80,6 +81,7 @@ const Main = () => {
     <div className="w-full h-full max-w-[500px] mx-auto flex flex-col bg-white">
       <Header />
       <main className="flex flex-col items-center justify-center flex-grow px-4">
+        {/* "오늘의 질문" 버튼 */}
         {!showAnalysisMessage && !showProgressTimer && !showCountdown && (
           <button
             onClick={handleQuestionClick}
@@ -89,14 +91,17 @@ const Main = () => {
           </button>
         )}
 
+        {/* 질문 내용 표시 */}
         {(showCountdown || showProgressTimer) && (
           <Question questionText={questionText} />
         )}
 
+        {/* 카운트다운 컴포넌트 */}
         {showCountdown && (
           <Countdown onCountdownComplete={handleCountdownComplete} />
         )}
 
+        {/* 1분 타이머 및 녹음 컴포넌트 */}
         {showProgressTimer && (
           <>
             <ProgressTimer duration={0.25} onTimeUp={handleStopRecording} />
@@ -127,6 +132,7 @@ const Main = () => {
           </div>
         )}
 
+        {/* 분석 중일 때 로딩 상태 표시 */}
         {loading && (
           <div className="flex flex-col items-center justify-center mt-4">
             {audioUrl && (
@@ -134,25 +140,33 @@ const Main = () => {
                 Your browser does not support the audio element.
               </audio>
             )}
-            <p className="mb-10 text-xl font-semibold text-center text-grayscale-100">
-              답변 내용을 분석 중입니다.
+            <p className="mb-10 text-lg font-semibold text-center font-paperlogy-title text-grayscale-100">
+              답변 내용을 분석 중입니다
             </p>
             <ClockLoader color="#4A90E2" loading={loading} size={60} />
-            <button
-              onClick={handleShowAISpeechPopup}
-              className="px-8 py-3 mt-10 text-lg font-semibold text-white rounded-full bg-primary-50"
-            >
-              AI 답변 보기
-            </button>
-            <button
-              onClick={() => navigate("/recordscript")} // 화살표 함수로 변경
-              className="px-8 py-3 mt-10 text-lg font-semibold text-white rounded-full bg-primary-50"
-            >
-              피드백 받기
-            </button>
+
+            {/* AI 답변 보기 및 피드백 받기 버튼 */}
+            <div className="flex justify-center mt-10 space-x-4">
+              <button
+                onClick={handleShowAISpeechPopup}
+                className="px-6 py-3 text-lg font-semibold text-white rounded-full bg-primary-50"
+              >
+                AI 답변 보기
+              </button>
+              <button
+                onClick={() => navigate("/recordscript")}
+                className="px-6 py-3 text-lg font-semibold text-white rounded-full bg-primary-50"
+              >
+                피드백 받기
+              </button>
+            </div>
+
+            {/* 사용자 개인 평가 메모장 */}
+            <UserMemo />
           </div>
         )}
 
+        {/* AI 답변 팝업 */}
         <AISpeechPopup
           isOpen={showAISpeechPopup}
           onClose={handleCloseAISpeechPopup}
@@ -163,4 +177,5 @@ const Main = () => {
     </div>
   );
 };
+
 export default Main;
