@@ -25,6 +25,7 @@ const Main = () => {
   const [showAISpeechPopup, setShowAISpeechPopup] = useState(false);
   const [showAnalysisMessage, setShowAnalysisMessage] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [insightComplete, setInsightComplete] = useState(false);
   const [analysisComplete, setAnalysisComplete] = useState(false); // 분석 완료 여부 상태
 
   const { answerId, setAnswerId } = useRecordContext();
@@ -78,9 +79,9 @@ const Main = () => {
     setShowAISpeechPopup(true); // AI 답변 팝업 열기
   };
 
-  const handleAnalysisComplete = () => {
-    setAnalysisComplete(true); // 분석 완료 상태로 설정
-  };
+  // const handleAnalysisComplete = () => {
+  //   setAnalysisComplete(true); // 분석 완료 상태로 설정
+  // };
 
   return (
     <div className="w-full h-full max-w-[500px] mx-auto flex flex-col bg-white">
@@ -118,9 +119,10 @@ const Main = () => {
               answerId={answerId}
               questionText={questionText}
               onResponse={(response) => setAiResponse(response)}
+              setInsightComplete={setInsightComplete}
+              setAnalysisComplete={setAnalysisComplete}
               handleProgressTimeUp={handleProgressTimeUp}
               handleStopRecording={handleStopRecording}
-              handleAnaylsisComplete={handleAnalysisComplete}
             />
             <VolumeVisualizer isRecording={isRecording} />
           </>
@@ -156,6 +158,7 @@ const Main = () => {
               <button
                 onClick={handleShowAISpeechPopup}
                 className="px-6 py-3 text-lg font-semibold text-white rounded-full bg-primary-50"
+                disabled={!insightComplete}
               >
                 AI 답변 보기
               </button>
