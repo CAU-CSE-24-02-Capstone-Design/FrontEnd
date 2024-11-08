@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import Lottie from "react-lottie-player";
+import mainAnimations from "../../components/animations/mainAnimation.json";
 import Header from "../../components/Header";
 import NavBar from "../../components/NavBar";
 import Countdown from "./components/Countdown";
@@ -111,6 +113,18 @@ const Main = () => {
             />
             <VolumeVisualizer isRecording={isRecording} />
           </>
+        )}
+
+        {/* 메인 시작 페이지 돋보기 애니메이션 */}
+        {!showAnalysisMessage && !showProgressTimer && !showCountdown && (
+          <div className="w-3/4 mt-14">
+            <Lottie
+              loop
+              animationData={mainAnimations}
+              play
+              style={{ width: "100%", height: "auto" }}
+            />
+          </div>
         )}
 
         {loading && (
