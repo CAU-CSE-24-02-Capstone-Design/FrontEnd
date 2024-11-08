@@ -60,7 +60,6 @@
   box-sizing: border-box; /* Include padding and border in the element's total width and height */
 }
 
-
 form div {
   margin-bottom: 15px;
 }
@@ -80,4 +79,20 @@ button {
   padding: 10px 20px;
   margin-top: 10px;
   cursor: pointer;
+}
+
+@keyframes floating {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-7px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.animate-floating {
+  animation: floating 1s ease-in-out infinite;
 }

@@ -9,12 +9,14 @@ const GuestRecord = () => {
   const [media, setMedia] = useState(null); // MediaRecorder 객체를 저장하여 녹음을 관리
   const [isRecording, setIsRecording] = useState(false); // 녹음 중인지 여부를 추적
   const [audioUrl, setAudioUrl] = useState(null); // 녹음된 오디오 데이터를 Blob으로 저장
+  const [showGuide, setShowGuide] = useState(true); // 코치마크 표시 여부
   const audioContextRef = useRef(null); // AudioContext 참조
   const sourceRef = useRef(null); // MediaStreamSource 참조
   const navigate = useNavigate();
 
   // 녹음 시작
   const onRecAudio = async () => {
+    setShowGuide(false); // 녹음 가이드를 숨김
     if (audioContextRef.current) {
       console.log("AudioContext already exists, reusing.");
     } else {
@@ -97,38 +99,57 @@ const GuestRecord = () => {
   };
 
   return (
-    <>
-      {/* 녹음 버튼 */}
-      <button
-        onClick={isRecording ? offRecAudio : onRecAudio}
-        className="px-6 py-2 mt-6 text-base font-semibold text-white rounded-full bg-primary-50"
-      >
-        {isRecording ? "녹음 중지" : "녹음 시작"}
-      </button>
+    <div className="relative flex flex-col items-center">
+      {showGuide && (
+        <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black bg-opacity-50">
+          <div className="relative flex flex-col items-center text-xl font-semibold text-center text-white font-paperlogy-heading">
+            {/* 스크립트 안내 텍스트 */}
+            <div className="mt-6 mb-6 animate-floating">
+              <p>▼ 아래 스크립트를 읽어주세요 ▼</p>
+              <div className="arrow-up"></div>
+            </div>
 
-      {/*/!* 녹음 중일 때 볼륨 시각화 *!/*/}
-      {/*{isRecording && audioContextRef.current && sourceRef.current && (*/}
-      {/*  <VolumeVisualizer*/}
-      {/*    audioContext={audioContextRef.current}*/}
-      {/*    source={sourceRef.current}*/}
-      {/*  />*/}
-      {/*)}*/}
+            {/* 녹음 버튼 안내 텍스트 */}
+            <div className="mt-80">
+              <p>녹음 버튼을 클릭하면 시작합니다!</p>
+              <div className="arrow-down"></div>
+            </div>
+
+            <button
+              className="px-8 py-4 mt-4 text-lg font-semibold text-black rounded-full bg-primary-20"
+              onClick={() => setShowGuide(false)}
+            >
+              녹음 가이드 닫기
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* 녹음 버튼 */}
+      {!audioUrl && (
+        <button
+          onClick={isRecording ? offRecAudio : onRecAudio}
+          className="px-6 py-3 mt-10 text-base font-semibold text-white rounded-full bg-primary-50"
+        >
+          {isRecording ? "녹음 중지" : "녹음 시작"}
+        </button>
+      )}
 
       {/* 녹음이 완료된 경우 메시지와 버튼 */}
-      {!isRecording && audioUrl && (
-        <div className="mt-10">
-          <p className="text-lg font-semibold">
+      {audioUrl && (
+        <div className="flex flex-col items-center mt-4 space-y-5">
+          <p className="text-lg font-medium text-center">
             사용자 목소리 녹음이 완료되었습니다 :)
           </p>
           <button
             onClick={() => navigate("/main")} // 메인 페이지로 이동
-            className="px-8 text-lg font-semibold text-white rounded-full bg-primary-50"
+            className="px-8 py-4 text-lg font-semibold text-white rounded-full bg-primary-50"
           >
             복숭아 멘토 시작하기
           </button>
         </div>
       )}
-    </>
+    </div>
   );
 };
 
