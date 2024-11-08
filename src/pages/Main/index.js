@@ -25,6 +25,7 @@ const Main = () => {
   const [showAISpeechPopup, setShowAISpeechPopup] = useState(false);
   const [showAnalysisMessage, setShowAnalysisMessage] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [analysisComplete, setAnalysisComplete] = useState(false); // 분석 완료 여부 상태
 
   const { answerId, setAnswerId } = useRecordContext();
 
@@ -75,6 +76,10 @@ const Main = () => {
 
   const handleShowAISpeechPopup = async () => {
     setShowAISpeechPopup(true); // AI 답변 팝업 열기
+  };
+
+  const handleAnalysisComplete = () => {
+    setAnalysisComplete(true); // 분석 완료 상태로 설정
   };
 
   return (
@@ -153,9 +158,15 @@ const Main = () => {
               >
                 AI 답변 보기
               </button>
+              {/* 분석이 완료되어야 활성화되는 "피드백 받기" 버튼 */}
               <button
                 onClick={() => navigate("/recordscript")}
-                className="px-6 py-3 text-lg font-semibold text-white rounded-full bg-primary-50"
+                className={`px-6 py-3 text-lg font-semibold text-white rounded-full ${
+                  analysisComplete
+                    ? "bg-primary-50"
+                    : "bg-primary-10 cursor-not-allowed"
+                }`}
+                disabled={!analysisComplete}
               >
                 피드백 받기
               </button>
