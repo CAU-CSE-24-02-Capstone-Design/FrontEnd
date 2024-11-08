@@ -171,12 +171,6 @@ const Main = () => {
               >
                 피드백 받기
               </button>
-              <button
-                onClick={() => navigate("/recordscript")}
-                className="px-6 py-3 text-lg font-semibold text-white rounded-full bg-primary-50"
-              >
-                피드백 받기
-              </button>
             </div>
 
             {/* 사용자 개인 평가 메모장 */}
