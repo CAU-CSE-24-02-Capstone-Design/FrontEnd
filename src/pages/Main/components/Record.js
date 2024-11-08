@@ -13,7 +13,8 @@ const Record = ({
                     questionText,
                     onResponse,
                     handleProgressTimeUp,
-                    handleStopRecording
+                    handleStopRecording,
+                    handleAnaylsisComplete
                 }) => {
     const [stream, setStream] = useState(null); // 마이크에서 가져온 오디오 스트림을 저장
     const [media, setMedia] = useState(null); // MediaRecorder 객체를 저장하여 녹음을 관리
@@ -62,11 +63,12 @@ const Record = ({
             );
             onResponse(response.data.insight);
             getFeedback();
+            handleAnaylsisComplete();
 
         } catch (error) {
             console.error("인사이트 받아오기 실패");
         }
-    }, [answerId, questionText, onResponse, getFeedback]);
+    }, [answerId, questionText, onResponse, getFeedback, handleAnaylsisComplete]);
 
     const onSubmitAudioFile = useCallback(async (audioUrl) => {
         if (audioUrl) {
