@@ -29,7 +29,7 @@ const Main = () => {
     const [analysisComplete, setAnalysisComplete] = useState(false);
     const [showSelfFeedback, setShowSelfFeedback] = useState(false);
 
-    const {answerId, setAnswerId} = useState("");
+    const [answerId, setAnswerId] = useState("");
     const [audioUrl, setAudioUrl] = useState(null);
     const [onRec, setOnRec] = useState(false);
     const [aiResponse, setAiResponse] = useState("");
