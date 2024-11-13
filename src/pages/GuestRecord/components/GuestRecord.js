@@ -62,7 +62,6 @@ const GuestRecord = () => {
     mediaRecorder.ondataavailable = async (e) => {
       if (e.data && e.data.size > 0) {
         const wavBlob = await getWaveBlob(e.data, true);
-        console.log("변환 데이터: ", wavBlob);
         const url = URL.createObjectURL(wavBlob); // Blob을 URL로 변환
         setAudioUrl(url); // audioUrl 상태에 설정
         sendAudioFile(wavBlob); // 녹음된 오디오 파일 전송
@@ -92,9 +91,9 @@ const GuestRecord = () => {
           "Content-Type": "multipart/form-data",
         },
       });
-      console.log("녹음 파일 전송 성공");
+      console.log("사용자 목소리 녹음 파일 전송 성공");
     } catch (error) {
-      console.error("녹음 파일 전송 실패");
+      console.error("사용자 목소리 녹음 파일 전송 실패");
     }
   };
 

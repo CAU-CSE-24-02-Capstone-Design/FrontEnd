@@ -2,7 +2,6 @@ import React, {useCallback, useEffect, useRef, useState} from "react";
 import {getWaveBlob} from "webm-to-wav-converter";
 import {FASTAPI_API_URL, SPRING_API_URL} from "../../../constants/api";
 import instance from "../../../axios/TokenInterceptor";
-import {useRecordContext} from "../../../context/RecordContext";
 
 const Record = ({
                     setAudioUrl,
@@ -22,34 +21,21 @@ const Record = ({
     const audioContextRef = useRef(null); // AudioContext 참조
     const sourceRef = useRef(null); // MediaStreamSource 참조
 
-    const {
-        setUserAudioUrl,
-        setAiAudioUrl,
-        setUserScript,
-        setAiScript,
-        setFeedback,
-    } = useRecordContext();
-
     const getFeedback = useCallback(async () => {
         try {
-            const response = await instance.get(
+            const response = await instance.post(
                 `${SPRING_API_URL}/feedbacks?answerId=${answerId}`
             );
             if (response.data.isSuccess) {
-                setUserAudioUrl(response.data.result.beforeAudioLink);
-                setAiAudioUrl(response.data.result.afterAudioLink);
-                setUserScript(response.data.result.beforeScript);
-                setAiScript(response.data.result.afterScript);
-                setFeedback(response.data.result.feedbackText);
-
                 setAnalysisComplete(true);
+                console.log("유저 답변에 대한 피드백 데이터 생성하기 성공");
             } else {
-                console.error("데이터 api 오류");
+                console.error("유저 답변에 대한 피드백 데이터 생성하기 api 오류");
             }
         } catch (error) {
-            console.error("데이터 받아오기 실패");
+            console.error("유저 답변에 대한 피드백 데이터 생성하기 실패");
         }
-    }, [answerId, setUserAudioUrl, setAiAudioUrl, setUserScript, setAiScript, setFeedback, setAnalysisComplete]);
+    }, [answerId, setAnalysisComplete]);
 
     const sendAudioFile = useCallback(async (sound) => {
         try {
@@ -65,8 +51,9 @@ const Record = ({
                 }
             );
             onResponse(response.data.insight);
-            getFeedback();
+            await getFeedback();
             setInsightComplete(true);
+            console.log("AI 인사이트 받아오기 성공");
         } catch (error) {
             console.error("인사이트 받아오기 실패");
         }
@@ -78,7 +65,6 @@ const Record = ({
                 lastModified: new Date().getTime(),
                 type: "audio/wave",
             });
-            console.log(sound); // File 정보 출력
             setAudioUrl(URL.createObjectURL(sound)); // 변환된 URL 설정
             await sendAudioFile(sound);
         }
@@ -88,8 +74,6 @@ const Record = ({
         mediaRecorder.ondataavailable = async (e) => {
             if (e.data && e.data.size > 0) {
                 const wavBlob = await getWaveBlob(e.data, true);
-                console.log("변환 데이터: ", wavBlob);
-
                 setOnRec(false);
                 await onSubmitAudioFile(wavBlob);
             }
@@ -153,12 +137,9 @@ const Record = ({
 
 
     useEffect(() => {
-        console.log("onRec : ", onRec, ", isRecording : ", isRecording);
         if (!onRec && isRecording) {
-            console.log("녹음 시작 : ", "onRec : ", onRec, ", isRecording : ", isRecording);
             onRecAudio();
         } else if (onRec && !isRecording) {
-            console.log("녹음 종료 : ", "onRec : ", onRec, ", isRecording : ", isRecording);
             offRecAudio();
         }
     }, [onRec, isRecording, onRecAudio, offRecAudio])

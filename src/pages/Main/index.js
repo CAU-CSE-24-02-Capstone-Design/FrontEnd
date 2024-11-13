@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import Lottie from "react-lottie-player";
 import mainAnimations from "../../components/animations/mainAnimation.json";
 import Header from "../../components/Header";
@@ -10,11 +10,11 @@ import Record from "./components/Record";
 import VolumeVisualizer from "./components/VolumeVisualizer";
 import AISpeechPopup from "./components/AISpeechPopup";
 import UserMemo from "./components/UserMemo";
-import {ClockLoader} from "react-spinners"; // 로딩중 효과 (ClockLoader)
+import {ClockLoader} from "react-spinners";
 import {SPRING_API_URL} from "../../constants/api";
 import instance from "../../axios/TokenInterceptor";
 import {useNavigate} from "react-router-dom";
-import {useRecordContext} from "../../context/RecordContext";
+import SelfFeedback from "./components/SelfFeedback";
 
 const Main = () => {
     const navigate = useNavigate();
@@ -26,14 +26,35 @@ const Main = () => {
     const [showAnalysisMessage, setShowAnalysisMessage] = useState(false);
     const [loading, setLoading] = useState(false);
     const [insightComplete, setInsightComplete] = useState(false);
-    const [analysisComplete, setAnalysisComplete] = useState(false); // 분석 완료 여부 상태
+    const [analysisComplete, setAnalysisComplete] = useState(false);
+    const [showSelfFeedback, setShowSelfFeedback] = useState(false);
 
-    const {answerId, setAnswerId} = useRecordContext();
-
+    const {answerId, setAnswerId} = useState("");
     const [audioUrl, setAudioUrl] = useState(null);
     const [onRec, setOnRec] = useState(false);
     const [aiResponse, setAiResponse] = useState("");
     const [questionText, setQuestionText] = useState("");
+    const [selfFeedback, setSelfFeedback] = useState("");
+
+    useEffect(() => {
+        const getBeforeSelfFeedback = async () => {
+            try {
+                const response = await instance.get(`${SPRING_API_URL}/self-feedbacks/latest-feedbacks`);
+                if (response.data.isSuccess) {
+                    if (response.data.code === "ANSWER4001" || response.data.code === "SELFFEEDBACK4001") {
+                        await handleCloseSelfFeedback();
+                    } else {
+                        setSelfFeedback(response.data.result.feedback);
+                        await handleShowSelfFeedback();
+                        console.log("이전 셀프 피드백 받아오기 성공");
+                    }
+                }
+            } catch (error) {
+                console.error("이전 셀프 피드백 받아오기 실패");
+            }
+        };
+        getBeforeSelfFeedback();
+    }, []);
 
     const handleQuestionClick = async () => {
         try {
@@ -41,12 +62,13 @@ const Main = () => {
             if (response.data.isSuccess) {
                 setQuestionText(response.data.result.questionDescription);
                 setAnswerId(response.data.result.answerId);
+                localStorage.setItem("answerId", answerId);
+                console.log("질문 받아오기 성공");
             } else {
                 console.error("질문 받아오기 오류");
                 console.log(response.data.code);
                 console.log(response.data.message);
             }
-            console.log("질문 받아오기 성공");
         } catch (error) {
             console.error("질문 받아오기 실패");
         }
@@ -79,14 +101,34 @@ const Main = () => {
         setShowAISpeechPopup(true); // AI 답변 팝업 열기
     };
 
-    // const handleAnalysisComplete = () => {
-    //   setAnalysisComplete(true); // 분석 완료 상태로 설정
-    // };
+    const handleCloseSelfFeedback = async () => {
+        setShowSelfFeedback(false);
+    }
+    const handleShowSelfFeedback = async () => {
+        setShowSelfFeedback(true);
+    }
 
     return (
         <div className="w-full h-full max-w-[500px] mx-auto flex flex-col bg-white">
             <Header/>
             <main className="flex flex-col items-center justify-center flex-grow px-4">
+
+                {/* 이전 스피치에서의 셀프 피드백 */}
+                {showSelfFeedback && (
+                    <>
+                        {/* 이전 스피치에서의 셀프 피드백 */}
+                        <SelfFeedback selfFeedback={selfFeedback}/>
+
+                        {/* "오늘의 질문" 버튼 */}
+                        <button
+                            onClick={handleQuestionClick}
+                            className="px-6 py-4 mt-6 text-lg text-white rounded bg-primary-50 font-paperlogy-title"
+                        >
+                            오늘의 질문
+                        </button>
+                    </>
+                )}
+
                 {/* "오늘의 질문" 버튼 */}
                 {!showAnalysisMessage && !showProgressTimer && !showCountdown && (
                     <button
