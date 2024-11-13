@@ -37,7 +37,7 @@ const Main = () => {
 
     const handleQuestionClick = async () => {
         try {
-            const response = await instance.get(`${SPRING_API_URL}/question`);
+            const response = await instance.get(`${SPRING_API_URL}/questions`);
             if (response.data.isSuccess) {
                 setQuestionText(response.data.result.questionDescription);
                 setAnswerId(response.data.result.answerId);
