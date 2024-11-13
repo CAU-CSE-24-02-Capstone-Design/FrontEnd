@@ -6,13 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="b5dda6d2-e76f-446c-9c6c-4e3d50c35be1" name="Changes" comment="fix: nginx swagger 경로 수정">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/context/RecordContext.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/GuestRecord/components/GuestRecord.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/GuestRecord/components/GuestRecord.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Main/components/Record.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Main/components/Record.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Main/components/UserMemo.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Main/components/UserMemo.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Main/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Main/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/RecordScript/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/RecordScript/index.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -45,7 +38,7 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "dev",
+    "git-widget-placeholder": "feat/self-feedback",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/YJG/Desktop/capstone/FrontEnd",
     "node.js.detected.package.eslint": "true",

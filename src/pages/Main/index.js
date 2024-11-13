@@ -56,13 +56,19 @@ const Main = () => {
         getBeforeSelfFeedback();
     }, []);
 
+    useEffect(() => {
+        if (answerId) {
+            localStorage.setItem("answerId", answerId);
+        }
+    }, [answerId]);
+
+
     const handleQuestionClick = async () => {
         try {
             const response = await instance.get(`${SPRING_API_URL}/questions`);
             if (response.data.isSuccess) {
                 setQuestionText(response.data.result.questionDescription);
                 setAnswerId(response.data.result.answerId);
-                localStorage.setItem("answerId", answerId);
                 console.log("질문 받아오기 성공");
             } else {
                 console.error("질문 받아오기 오류");
