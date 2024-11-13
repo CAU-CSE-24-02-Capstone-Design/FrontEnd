@@ -87,7 +87,7 @@ const GuestRecord = () => {
     try {
       const formData = new FormData();
       formData.append("file", sound);
-      await instance.post(`${FASTAPI_API_URL}/record/voice`, formData, {
+      await instance.post(`${FASTAPI_API_URL}/records/voices`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

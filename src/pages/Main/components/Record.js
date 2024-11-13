@@ -33,7 +33,7 @@ const Record = ({
     const getFeedback = useCallback(async () => {
         try {
             const response = await instance.get(
-                `${SPRING_API_URL}/feedback?answerId=${answerId}`
+                `${SPRING_API_URL}/feedbacks?answerId=${answerId}`
             );
             if (response.data.isSuccess) {
                 setUserAudioUrl(response.data.result.beforeAudioLink);
@@ -58,7 +58,7 @@ const Record = ({
             formData.append("answerId", parseInt(answerId, 10));
             formData.append("question", questionText);
             const response = await instance.post(
-                `${FASTAPI_API_URL}/record/insight`,
+                `${FASTAPI_API_URL}/records/insights`,
                 formData,
                 {
                     headers: {"Content-Type": "multipart/form-data"},
