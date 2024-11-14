@@ -51,8 +51,8 @@ const Record = ({
                 }
             );
             onResponse(response.data.insight);
-            await getFeedback();
             setInsightComplete(true);
+            getFeedback();
             console.log("AI 인사이트 받아오기 성공");
         } catch (error) {
             console.error("인사이트 받아오기 실패");

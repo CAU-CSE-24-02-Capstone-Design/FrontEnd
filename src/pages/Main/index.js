@@ -69,6 +69,7 @@ const Main = () => {
             if (response.data.isSuccess) {
                 setQuestionText(response.data.result.questionDescription);
                 setAnswerId(response.data.result.answerId);
+                setShowSelfFeedback(false);
                 console.log("질문 받아오기 성공");
             } else {
                 console.error("질문 받아오기 오류");
