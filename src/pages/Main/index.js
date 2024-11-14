@@ -42,10 +42,10 @@ const Main = () => {
                 const response = await instance.get(`${SPRING_API_URL}/self-feedbacks/latest-feedbacks`);
                 if (response.data.isSuccess) {
                     if (response.data.code === "ANSWER4001" || response.data.code === "SELFFEEDBACK4001") {
-                        await handleCloseSelfFeedback();
+                        setShowSelfFeedback(false);
                     } else {
                         setSelfFeedback(response.data.result.feedback);
-                        await handleShowSelfFeedback();
+                        setShowSelfFeedback(true);
                         console.log("이전 셀프 피드백 받아오기 성공");
                     }
                 }
@@ -107,13 +107,6 @@ const Main = () => {
         setShowAISpeechPopup(true); // AI 답변 팝업 열기
     };
 
-    const handleCloseSelfFeedback = async () => {
-        setShowSelfFeedback(false);
-    }
-    const handleShowSelfFeedback = async () => {
-        setShowSelfFeedback(true);
-    }
-
     return (
         <div className="w-full h-full max-w-[500px] mx-auto flex flex-col bg-white">
             <Header/>
@@ -121,18 +114,7 @@ const Main = () => {
 
                 {/* 이전 스피치에서의 셀프 피드백 */}
                 {showSelfFeedback && (
-                    <>
-                        {/* 이전 스피치에서의 셀프 피드백 */}
-                        <SelfFeedback selfFeedback={selfFeedback}/>
-
-                        {/* "오늘의 질문" 버튼 */}
-                        <button
-                            onClick={handleQuestionClick}
-                            className="px-6 py-4 mt-6 text-lg text-white rounded bg-primary-50 font-paperlogy-title"
-                        >
-                            오늘의 질문
-                        </button>
-                    </>
+                    <SelfFeedback selfFeedback={selfFeedback}/>
                 )}
 
                 {/* "오늘의 질문" 버튼 */}
