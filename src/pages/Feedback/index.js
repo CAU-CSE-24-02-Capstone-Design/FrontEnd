@@ -6,12 +6,15 @@ import ScriptBox from "./components/ScriptBox";
 import SelfFeedbackPopup from "./components/SelfFeedbackPopup";
 import instance from "../../axios/TokenInterceptor";
 import {SPRING_API_URL} from "../../constants/api";
+import {useLocation} from "react-router-dom";
 
 const userImage = "/images/record_user.png";
 const aiImage = "/images/record_ai.png";
 const feedbackImage = "/images/record_feedback.png";
 
 const Feedback = (answerId) => {
+    const location = useLocation();
+    const {answerId} = location.state || {};
 
     const [userAudioUrl, setUserAudioUrl] = useState("");
     const [aiAudioUrl, setAiAudioUrl] = useState("");

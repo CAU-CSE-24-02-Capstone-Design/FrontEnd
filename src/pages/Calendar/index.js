@@ -22,6 +22,8 @@ const CalendarPage = () => {
                     answerId: answerId,
                 }
             });
+        } else {
+            console.log("해당 날짜에 스피치를 진행하지 않았습니다.");
         }
     };
 

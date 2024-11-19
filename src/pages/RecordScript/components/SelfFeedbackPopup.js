@@ -12,8 +12,12 @@ const SelfFeedbackPopup = ({isOpen, onClose}) => {
             const response = await instance.post(`${SPRING_API_URL}/self-feedbacks/evaluations?answerId=${answerId}`,
                 {evaluation: rating});
             if (response.data.isSuccess) {
-                onClose();
-                console.log("셀프 피드백 평가 점수 저장하기 성공");
+                if (response.data.code === "SELFFEEDBACK4001") {
+
+                } else {
+                    onClose();
+                    console.log("셀프 피드백 평가 점수 저장하기 성공");
+                }
             } else {
                 console.error("셀프 피드백 평가 점수 저장하기 api 오류");
             }
