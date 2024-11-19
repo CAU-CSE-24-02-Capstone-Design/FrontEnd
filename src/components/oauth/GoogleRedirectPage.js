@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import {useLocation, useNavigate} from "react-router-dom";
 import axios from "axios";
 import {SPRING_API_URL} from "../../constants/api";
@@ -8,6 +8,9 @@ axios.defaults.withCredentials = true;
 const GoogleRedirectPage = () => {
     const location = useLocation();
     const navigate = useNavigate();
+
+    const [selfFeedback, setSelfFeedback] = useState(null);
+    const [isCompleteSpeech, setIsCompleteSpeech] = useState(false);
 
     useEffect(() => {
         const handleOAuthGoogle = async (code) => {
@@ -25,8 +28,11 @@ const GoogleRedirectPage = () => {
 
                     if (role === "GUEST")
                         navigate("/guestrecord");
-                    else if (role === "USER")
-                        navigate(`/main?selfFeedback=${null}&isCompleteSpeech=${false}`);
+                    else if (role === "USER") {
+                        await getDoAnswerToday();
+                        await getBeforeSelfFeedback();
+                        navigate(`/main?selfFeedback=${selfFeedback}&isCompleteSpeech=${isCompleteSpeech}`);
+                    }
                 } else {
                     console.error("OAuth2 로그인 오류");
                     console.log(response.data.code);
@@ -42,7 +48,48 @@ const GoogleRedirectPage = () => {
         if (code) {
             handleOAuthGoogle(code);
         }
-    }, [location, navigate]); // 의존성 배열에서 navigate 추가
+    }, [location, navigate, isCompleteSpeech, selfFeedback]); // 의존성 배열에서 navigate 추가
+
+    const getDoAnswerToday = async () => {
+        try {
+            const response = await axios.get(`${SPRING_API_URL}/answers/completions`);
+            if (response.data.isSuccess) {
+                if (response.data.code === "ANSWER4001" || response.data.code === "USER4002" || response.data.code === "ACCESSTOKEN4002") {
+                    console.error("오늘 답변 했는 지 여부 받아오기 API 서버 에러");
+                } else {
+                    if (response.data.result.answerExists) {
+                        setIsCompleteSpeech(true);
+                    } else {
+                        setIsCompleteSpeech(false);
+                    }
+                    console.log("오늘 답변 했는 지 여부 받아오기 성공");
+                }
+            } else {
+                console.error("오늘 답변 했는 지 여부 받아오기 실패");
+            }
+        } catch (error) {
+            console.error("오늘 답변 했는 지 여부 받아오기 실패", error);
+        }
+    };
+
+    const getBeforeSelfFeedback = async () => {
+        try {
+            const response = await axios.get(`${SPRING_API_URL}/self-feedbacks/latest-feedbacks`);
+            if (response.data.isSuccess) {
+                if (response.data.code === "ANSWER4001" || response.data.code === "SELFFEEDBACK4001") {
+                    console.log("이전 셀프 피드백 없음");
+                } else {
+                    setSelfFeedback(response.data.result.feedback);
+                    console.log("이전 셀프 피드백 받아오기 성공");
+                }
+            } else {
+                console.error("이전 셀프 피드백 받아오기 실패");
+            }
+        } catch (error) {
+            console.error("이전 셀프 피드백 받아오기 실패", error);
+        }
+    };
+
 
     return <div>Processing...</div>;
 };
