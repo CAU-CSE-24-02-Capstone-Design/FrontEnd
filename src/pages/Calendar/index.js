@@ -3,7 +3,6 @@ import Header from "../../components/Header";
 import NavBar from "../../components/NavBar";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
-import {FaCheckCircle} from "react-icons/fa";
 import instance from "../../axios/TokenInterceptor";
 import {SPRING_API_URL} from "../../constants/api";
 import {useNavigate} from "react-router-dom";
@@ -92,12 +91,18 @@ const CalendarPage = () => {
                         formatDay={(locale, date) => date.getDate()}
                         tileContent={({date, view}) => {
                             if (view === "month" && markedDates[date.getDate() - 1] !== 0) {
+                                // return (
+                                //     <div className="relative flex items-center justify-center px-4 py-2">
+                                //         <FaCheckCircle
+                                //             className="absolute text-green-500 bottom-1 right-1"
+                                //             size={14}
+                                //         />
+                                //     </div>
+                                // );
                                 return (
                                     <div className="relative flex items-center justify-center px-4 py-2">
-                                        <FaCheckCircle
-                                            className="absolute text-green-500 bottom-1 right-1"
-                                            size={14}
-                                        />
+                                        <div
+                                            className="absolute w-4 h-4 rounded-full bg-red-500 top-0 left-0 right-0 bottom-0 m-auto"></div>
                                     </div>
                                 );
                             }

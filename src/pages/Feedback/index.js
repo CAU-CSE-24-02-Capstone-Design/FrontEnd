@@ -53,7 +53,6 @@ const Feedback = () => {
         };
 
         const getAiResponse = async () => {
-            const answerId = localStorage.getItem("answerId");
             try {
                 const response = await instance.get(
                     `${SPRING_API_URL}/insights?answerId=${answerId}`
