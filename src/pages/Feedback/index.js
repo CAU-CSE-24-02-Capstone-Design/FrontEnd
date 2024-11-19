@@ -11,7 +11,7 @@ const userImage = "/images/record_user.png";
 const aiImage = "/images/record_ai.png";
 const feedbackImage = "/images/record_feedback.png";
 
-const Feedback = () => {
+const Feedback = (answerId) => {
 
     const [userAudioUrl, setUserAudioUrl] = useState("");
     const [aiAudioUrl, setAiAudioUrl] = useState("");
@@ -29,7 +29,6 @@ const Feedback = () => {
 
     useEffect(() => {
         const getFeedbackData = async () => {
-            const answerId = localStorage.getItem("answerId");
             try {
                 const response = await instance.get(
                     `${SPRING_API_URL}/feedbacks?answerId=${answerId}`
@@ -68,7 +67,7 @@ const Feedback = () => {
 
         getAiResponse();
         getFeedbackData();
-    }, []);
+    }, [answerId]);
 
     const playAudioWithGauge = (audioUrl) => {
         const audio = new Audio(audioUrl);

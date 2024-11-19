@@ -6,13 +6,21 @@ import "react-calendar/dist/Calendar.css";
 import {FaCheckCircle} from "react-icons/fa";
 import instance from "../../axios/TokenInterceptor";
 import {SPRING_API_URL} from "../../constants/api";
+import {useNavigate} from "react-router-dom";
 
 const CalendarPage = () => {
+    const navigate = useNavigate();
     const [selectedDate, setSelectedDate] = useState(new Date());
-    const [markedDates, setMarkedDates] = useState(new Array(31).fill(0)); // 답변 완료 여부를 저장
+    const [markedDates, setMarkedDates] = useState(new Array(32).fill(0));
 
     const handleDateChange = (date) => {
         setSelectedDate(date);
+        const answerId = markedDates[date.getDay() + 1];
+        navigate("/feedback", {
+            state: {
+                answerId: answerId,
+            }
+        });
     };
 
     const fetchCalendarData = async (year, month) => {
