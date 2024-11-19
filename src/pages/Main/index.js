@@ -141,35 +141,12 @@ const Main = () => {
             <main className="flex flex-col items-center justify-center flex-grow px-4">
 
                 {/* 이전 스피치에서의 셀프 피드백 */}
-                {/*{showSelfFeedback && (*/}
-                {/*    <SelfFeedback selfFeedback={selfFeedback}/>*/}
-                {/*)}*/}
+                {showSelfFeedback && (
+                    <SelfFeedback selfFeedback={selfFeedback}/>
+                )}
 
                 {/* "오늘의 질문" 버튼 */}
-                {showSelfFeedback && showQuestionButton && !showAnalysisMessage && !showProgressTimer && !showCountdown && (
-                    <div>
-                        <SelfFeedback selfFeedback={selfFeedback}/>
-                        <button
-                            onClick={handleQuestionClick}
-                            className="px-6 py-4 mt-6 text-lg text-white rounded bg-primary-50 font-paperlogy-title"
-                        >
-                            오늘의 질문
-                        </button>
-                    </div>
-                )}
-
-                {showSelfFeedback && !showQuestionButton && !showAnalysisMessage && !showProgressTimer && !showCountdown && (
-                    <div>
-                        <SelfFeedback selfFeedback={selfFeedback}/>
-                        <button
-                            className="px-6 py-4 mt-6 text-lg text-white rounded bg-primary-50 font-paperlogy-title"
-                        >
-                            이미 1분 스피치를 완료했습니다!
-                        </button>
-                    </div>
-                )}
-
-                {!showSelfFeedback && showQuestionButton && !showAnalysisMessage && !showProgressTimer && !showCountdown && (
+                {showQuestionButton && !showAnalysisMessage && !showProgressTimer && !showCountdown && (
                     <button
                         onClick={handleQuestionClick}
                         className="px-6 py-4 mt-6 text-lg text-white rounded bg-primary-50 font-paperlogy-title"
@@ -178,7 +155,8 @@ const Main = () => {
                     </button>
                 )}
 
-                {!showSelfFeedback && !showQuestionButton && !showAnalysisMessage && !showProgressTimer && !showCountdown && (
+                {/* 이미 스피치를 진행했을 때 */}
+                {!showQuestionButton && !showAnalysisMessage && !showProgressTimer && !showCountdown && (
                     <button
                         className="px-6 py-4 mt-6 text-lg text-white rounded bg-primary-50 font-paperlogy-title"
                     >

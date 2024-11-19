@@ -127,7 +127,7 @@ const RecordScript = ({selectedDate}) => {
 
                     {/* 상단 메시지 */}
                     <div className="relative flex flex-col w-full max-w-md px-4 py-2 rounded-md bg-grayscale-10">
-                        <p className="text-base font-paperlogy-title font-regular">
+                        <p className="text-base font-paperlogy-title font-regular text-center">
                             오늘 하루도 복숭아멘토 챌린지 성공!
                         </p>
                     </div>

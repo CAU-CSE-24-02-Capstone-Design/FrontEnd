@@ -104,9 +104,11 @@ const CalendarPage = () => {
                                 //     </div>
                                 // );
                                 return (
-                                    <div className="relative flex items-center justify-center px-4 py-2">
+                                    <div className="relative flex items-center justify-center w-full h-full">
                                         <div
-                                            className="absolute w-4 h-4 rounded-full bg-red-500 top-0 left-0 right-0 bottom-0 m-auto"></div>
+                                            className="absolute flex items-center justify-center w-8 h-8 rounded-full bg-red-500 text-white text-sm font-semibold">
+                                            {date.getDate()}
+                                        </div>
                                     </div>
                                 );
                             }
