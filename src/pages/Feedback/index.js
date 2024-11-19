@@ -12,9 +12,10 @@ const userImage = "/images/record_user.png";
 const aiImage = "/images/record_ai.png";
 const feedbackImage = "/images/record_feedback.png";
 
-const Feedback = (answerId) => {
+const Feedback = () => {
     const location = useLocation();
-    const {answerId} = location.state || {};
+    const searchParams = new URLSearchParams(location.search);
+    const answerId = searchParams.get("answerId");
 
     const [userAudioUrl, setUserAudioUrl] = useState("");
     const [aiAudioUrl, setAiAudioUrl] = useState("");
