@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react";
 import {useLocation, useNavigate} from "react-router-dom";
 import axios from "axios";
 import {SPRING_API_URL} from "../../constants/api";
+import instance from "../../axios/TokenInterceptor";
 
 axios.defaults.withCredentials = true;
 
@@ -29,9 +30,8 @@ const KakaoRedirectPage = () => {
                     if (role === "GUEST")
                         navigate("/guestrecord");
                     else if (role === "USER") {
-                        getDoAnswerToday();
-                        getBeforeSelfFeedback();
-                        navigateMain();
+                        await Promise.all([getDoAnswerToday(), getBeforeSelfFeedback()]);
+                        navigate(`/main?selfFeedback=${selfFeedback}&isCompleteSpeech=${isCompleteSpeech}`);
                     }
                 } else {
                     console.error("OAuth2 로그인 오류");
@@ -48,11 +48,11 @@ const KakaoRedirectPage = () => {
         if (code) {
             handleOAuthKakao(code);
         }
-    }, [location, navigate]); // 의존성 배열에서 navigate 추가
+    }, [location, navigate, isCompleteSpeech, selfFeedback]); // 의존성 배열에서 navigate 추가
 
     const getDoAnswerToday = async () => {
         try {
-            const response = await axios.get(`${SPRING_API_URL}/answers/completions`);
+            const response = await instance.get(`${SPRING_API_URL}/answers/completions`);
             if (response.data.isSuccess) {
                 if (response.data.code === "ANSWER4001" || response.data.code === "USER4002" || response.data.code === "ACCESSTOKEN4002") {
                     console.error("오늘 답변 했는 지 여부 받아오기 API 서버 에러");
@@ -74,7 +74,7 @@ const KakaoRedirectPage = () => {
 
     const getBeforeSelfFeedback = async () => {
         try {
-            const response = await axios.get(`${SPRING_API_URL}/self-feedbacks/latest-feedbacks`);
+            const response = await instance.get(`${SPRING_API_URL}/self-feedbacks/latest-feedbacks`);
             if (response.data.isSuccess) {
                 if (response.data.code === "ANSWER4001" || response.data.code === "SELFFEEDBACK4001") {
                     console.log("이전 셀프 피드백 없음");
@@ -88,10 +88,6 @@ const KakaoRedirectPage = () => {
         } catch (error) {
             console.error("이전 셀프 피드백 받아오기 실패", error);
         }
-    };
-
-    const navigateMain = () => {
-        navigate(`/main?selfFeedback=${selfFeedback}&isCompleteSpeech=${isCompleteSpeech}`);
     };
 
     return <div>Processing...</div>;
