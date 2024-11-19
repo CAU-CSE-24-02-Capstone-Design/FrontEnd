@@ -14,7 +14,7 @@ const Speech = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
-    const answerId = searchParams.get("answerId");
+    const answerId = parseInt(searchParams.get("answerId"), 10);
     const questionText = searchParams.get("questionText");
 
     const [showCountdown, setShowCountdown] = useState(true);

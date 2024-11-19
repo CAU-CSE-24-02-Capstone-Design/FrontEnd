@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React from "react";
 import Lottie from "react-lottie-player";
 import mainAnimations from "../../components/animations/mainAnimation.json";
 import Header from "../../components/Header";
@@ -16,24 +16,15 @@ const Main = () => {
     const feedback = selfFeedback === "null" ? null : selfFeedback;  // "null" 문자열을 null로 변환
     const isCompleteSpeech = searchParams.get("isCompleteSpeech") === "true";
 
-    const [answerId, setAnswerId] = useState("");
-    const [questionText, setQuestionText] = useState("");
-
-    useEffect(() => {
-        if (answerId) {
-            localStorage.setItem("answerId", answerId);
-        }
-    }, [answerId]);
-
-
     const handleQuestionClick = async () => {
         try {
             const response = await instance.get(`${SPRING_API_URL}/questions`);
             if (response.data.isSuccess) {
-                setQuestionText(response.data.result.questionDescription);
-                setAnswerId(response.data.result.answerId);
+                const questionText = response.data.result.questionDescription;
+                const answerId = response.data.result.answerId;
                 console.log("질문 받아오기 성공");
 
+                localStorage.setItem("answerId", answerId);
                 navigate(`/speech?answerId=${answerId}&questionText=${questionText}`);
             } else {
                 console.error("질문 받아오기 오류");
