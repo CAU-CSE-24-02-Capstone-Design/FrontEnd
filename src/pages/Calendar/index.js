@@ -15,7 +15,7 @@ const CalendarPage = () => {
 
     const handleDateChange = (date) => {
         setSelectedDate(date);
-        const answerId = markedDates[date.getDay() + 1];
+        const answerId = markedDates[date.getDate()];
         if (answerId > 0) {
             navigate("/feedback", {
                 state: {

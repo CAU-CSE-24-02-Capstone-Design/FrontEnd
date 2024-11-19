@@ -45,7 +45,7 @@ const Main = () => {
                     if (response.data.code === "ANSWER4001" || response.data.code === "USER4002" || response.data.code === "ACCESSTOKEN4002") {
                         console.error("오늘 답변 했는 지 여부 받아오기 API 서버 에러");
                     } else {
-                        if (response.data.result.isAnswerExists) {
+                        if (response.data.result.answerExists) {
                             setShowQuestionButton(false);
                         } else {
                             setShowQuestionButton(true);
