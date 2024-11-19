@@ -28,7 +28,7 @@ const Main = () => {
     const [insightComplete, setInsightComplete] = useState(false);
     const [analysisComplete, setAnalysisComplete] = useState(false);
     const [showSelfFeedback, setShowSelfFeedback] = useState(false);
-    const [showQuestionButton, setShowQuestionButton] = useState(true);
+    const [showQuestionButton, setShowQuestionButton] = useState(false);
 
     const [answerId, setAnswerId] = useState("");
     const [audioUrl, setAudioUrl] = useState(null);
