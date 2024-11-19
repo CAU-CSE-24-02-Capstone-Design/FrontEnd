@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import {FaStar} from "react-icons/fa";
 import Header from "../../components/Header";
 import NavBar from "../../components/NavBar";
-import AISpeechPopup from "../Main/components/AISpeechPopup";
+import AISpeechPopup from "./components/AISpeechPopup";
 import ScriptBox from "./components/ScriptBox";
 import SelfFeedbackPopup from "./components/SelfFeedbackPopup";
 import instance from "../../axios/TokenInterceptor";

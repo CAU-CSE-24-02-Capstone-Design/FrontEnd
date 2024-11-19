@@ -12,6 +12,7 @@ import GuestRecord from "./pages/GuestRecord";
 import RecordScript from "./pages/RecordScript";
 import "./App.css";
 import Feedback from "./pages/Feedback";
+import Speech from "./pages/Speech";
 
 const App = () => {
     return (
@@ -32,6 +33,7 @@ const App = () => {
                         element={<GoogleRedirectPage/>}
                     />
                     <Route path="/main" element={<Main/>}/>
+                    <Route path="/speech" element={<Speech/>}/>
 
                     {/* Header의 마이페이지 경로 */}
                     <Route path="/mypage" element={<MyPage/>}/>
