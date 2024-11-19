@@ -28,6 +28,7 @@ const Main = () => {
     const [insightComplete, setInsightComplete] = useState(false);
     const [analysisComplete, setAnalysisComplete] = useState(false);
     const [showSelfFeedback, setShowSelfFeedback] = useState(false);
+    const [showQuestionButton, setShowQuestionButton] = useState(true);
 
     const [answerId, setAnswerId] = useState("");
     const [audioUrl, setAudioUrl] = useState(null);
@@ -37,6 +38,28 @@ const Main = () => {
     const [selfFeedback, setSelfFeedback] = useState("");
 
     useEffect(() => {
+        const getDoAnswerToday = async () => {
+            try {
+                const response = await instance.get(`${SPRING_API_URL}/answers/completions`)
+                if (response.data.isSuccess) {
+                    if (response.data.code === "ANSWER4001" || response.data.code === "USER4002" || response.data.code === "ACCESSTOKEN4002") {
+                        console.error("오늘 답변 했는 지 여부 받아오기 API 서버 에러");
+                    } else {
+                        if (response.data.result.isAnswerExists) {
+                            setShowQuestionButton(false);
+                        } else {
+                            setShowQuestionButton(true);
+                        }
+                        console.log("오늘 답변 했는 지 여부 받아오기 성공");
+                    }
+                } else {
+                    console.error("오늘 답변 했는 지 여부 받아오기 실패");
+                }
+            } catch (error) {
+                console.error("오늘 답변 했는 지 여부 받아오기 실패");
+            }
+        }
+
         const getBeforeSelfFeedback = async () => {
             try {
                 const response = await instance.get(`${SPRING_API_URL}/self-feedbacks/latest-feedbacks`);
@@ -48,11 +71,15 @@ const Main = () => {
                         setShowSelfFeedback(true);
                         console.log("이전 셀프 피드백 받아오기 성공");
                     }
+                } else {
+                    console.error("이전 셀프 피드백 받아오기 실패");
                 }
             } catch (error) {
                 console.error("이전 셀프 피드백 받아오기 실패");
             }
         };
+
+        getDoAnswerToday();
         getBeforeSelfFeedback();
     }, []);
 
@@ -119,7 +146,7 @@ const Main = () => {
                 )}
 
                 {/* "오늘의 질문" 버튼 */}
-                {!showAnalysisMessage && !showProgressTimer && !showCountdown && (
+                {showQuestionButton && !showAnalysisMessage && !showProgressTimer && !showCountdown && (
                     <button
                         onClick={handleQuestionClick}
                         className="px-6 py-4 mt-6 text-lg text-white rounded bg-primary-50 font-paperlogy-title"
