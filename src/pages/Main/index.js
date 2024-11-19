@@ -155,6 +155,15 @@ const Main = () => {
                     </button>
                 )}
 
+                {/* 이미 스피치를 진행했을 때 */}
+                {!showQuestionButton && !showAnalysisMessage && !showProgressTimer && !showCountdown && (
+                    <button
+                        className="px-6 py-4 mt-6 text-lg text-white rounded bg-primary-50 font-paperlogy-title"
+                    >
+                        이미 1분 스피치를 완료했습니다!
+                    </button>
+                )}
+
                 {/* 질문 내용 표시 */}
                 {(showCountdown || showProgressTimer) && (
                     <Question questionText={questionText}/>

@@ -107,8 +107,9 @@ const Feedback = () => {
                     </div>
 
                     {/* 상단 메시지 */}
-                    <div className="relative flex flex-col w-full max-w-md px-4 py-2 rounded-md bg-grayscale-10">
-                        <p className="text-base font-paperlogy-title font-regular">
+                    <div
+                        className="flex justify-center items-center w-full max-w-md px-4 py-2 rounded-md bg-grayscale-10">
+                        <p className="text-base font-paperlogy-title font-regular text-center">
                             {formattedDate} 스피치 기록!
                         </p>
                     </div>
