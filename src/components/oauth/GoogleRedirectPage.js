@@ -29,8 +29,9 @@ const GoogleRedirectPage = () => {
                     if (role === "GUEST")
                         navigate("/guestrecord");
                     else if (role === "USER") {
-                        await getDoAnswerToday();
-                        await getBeforeSelfFeedback();
+                        getDoAnswerToday();
+                        getBeforeSelfFeedback();
+                        navigateMain();
                     }
                 } else {
                     console.error("OAuth2 로그인 오류");
@@ -89,10 +90,9 @@ const GoogleRedirectPage = () => {
         }
     };
 
-    useEffect(() => {
+    const navigateMain = () => {
         navigate(`/main?selfFeedback=${selfFeedback}&isCompleteSpeech=${isCompleteSpeech}`);
-    }, [selfFeedback, isCompleteSpeech, navigate]); // 상태값이 변경될 때마다 실행
-
+    };
 
     return <div>Processing...</div>;
 };
