@@ -26,7 +26,7 @@ const GoogleRedirectPage = () => {
                     if (role === "GUEST")
                         navigate("/guestrecord");
                     else if (role === "USER")
-                        navigate("/main");
+                        navigate(`/main?selfFeedback=${null}&isCompleteSpeech=${false}`);
                 } else {
                     console.error("OAuth2 로그인 오류");
                     console.log(response.data.code);

@@ -1,35 +1,83 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import React, {useEffect, useState} from "react";
+import {useNavigate} from "react-router-dom";
+import instance from "../axios/TokenInterceptor";
+import {SPRING_API_URL} from "../constants/api";
 
 const Header = () => {
-  const navigate = useNavigate();
+    const navigate = useNavigate();
+    const [selfFeedback, setSelfFeedback] = useState(null);
+    const [isCompleteSpeech, setIsCompleteSpeech] = useState(false);
 
-  // Header의 복숭아멘토 텍스트 클릭 시 메인 페이지로 이동
-  const handleLogoClick = () => {
-    navigate("/main");
-  };
+    useEffect(() => {
+        const getDoAnswerToday = async () => {
+            try {
+                const response = await instance.get(`${SPRING_API_URL}/answers/completions`)
+                if (response.data.isSuccess) {
+                    if (response.data.code === "ANSWER4001" || response.data.code === "USER4002" || response.data.code === "ACCESSTOKEN4002") {
+                        console.error("오늘 답변 했는 지 여부 받아오기 API 서버 에러");
+                    } else {
+                        if (response.data.result.answerExists) {
+                            setIsCompleteSpeech(true);
+                        } else {
+                            setIsCompleteSpeech(false);
+                        }
+                        console.log("오늘 답변 했는 지 여부 받아오기 성공");
+                    }
+                } else {
+                    console.error("오늘 답변 했는 지 여부 받아오기 실패");
+                }
+            } catch (error) {
+                console.error("오늘 답변 했는 지 여부 받아오기 실패");
+            }
+        }
 
-  // Header의 오른쪽 메뉴 버튼 클릭 시 마이페이지로 이동
-  const handleMyPageClick = () => {
-    navigate("/mypage");
-  };
+        const getBeforeSelfFeedback = async () => {
+            try {
+                const response = await instance.get(`${SPRING_API_URL}/self-feedbacks/latest-feedbacks`);
+                if (response.data.isSuccess) {
+                    if (response.data.code === "ANSWER4001" || response.data.code === "SELFFEEDBACK4001") {
+                    } else {
+                        setSelfFeedback(response.data.result.feedback);
+                        console.log("이전 셀프 피드백 받아오기 성공");
+                    }
+                } else {
+                    console.error("이전 셀프 피드백 받아오기 실패");
+                }
+            } catch (error) {
+                console.error("이전 셀프 피드백 받아오기 실패");
+            }
+        };
 
-  return (
-    <header className="flex justify-between items-center p-4 bg-primary-50 w-full max-w-[500px] mx-auto">
-      <h1
-        className="text-3xl font-bold font-paperlogy-heading text-white cursor-pointer"
-        onClick={handleLogoClick}
-      >
-        복숭아멘토
-      </h1>
-      <img
-        src="/webp/mypage_menu.webp"
-        alt="My Page Icon"
-        className="w-8 h-8 cursor-pointer"
-        onClick={handleMyPageClick}
-      />
-    </header>
-  );
+        getDoAnswerToday();
+        getBeforeSelfFeedback();
+    }, []);
+
+    // Header의 복숭아멘토 텍스트 클릭 시 메인 페이지로 이동
+    const handleLogoClick = () => {
+        navigate(`/main?selfFeedback=${selfFeedback}&isCompleteSpeech=${isCompleteSpeech}`);
+    };
+
+    // Header의 오른쪽 메뉴 버튼 클릭 시 마이페이지로 이동
+    const handleMyPageClick = () => {
+        navigate("/mypage");
+    };
+
+    return (
+        <header className="flex justify-between items-center p-4 bg-primary-50 w-full max-w-[500px] mx-auto">
+            <h1
+                className="text-3xl font-bold font-paperlogy-heading text-white cursor-pointer"
+                onClick={handleLogoClick}
+            >
+                복숭아멘토
+            </h1>
+            <img
+                src="/webp/mypage_menu.webp"
+                alt="My Page Icon"
+                className="w-8 h-8 cursor-pointer"
+                onClick={handleMyPageClick}
+            />
+        </header>
+    );
 };
 
 export default Header;

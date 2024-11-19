@@ -13,6 +13,7 @@ const Main = () => {
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
     const selfFeedback = searchParams.get("selfFeedback");
+    const feedback = selfFeedback === "null" ? null : selfFeedback;  // "null" 문자열을 null로 변환
     const isCompleteSpeech = searchParams.get("isCompleteSpeech") === "true";
 
     const [answerId, setAnswerId] = useState("");
@@ -50,7 +51,7 @@ const Main = () => {
             <main className="flex flex-col items-center justify-center flex-grow px-4">
 
                 {/* 이전 스피치에서의 셀프 피드백 */}
-                {selfFeedback && <SelfFeedback selfFeedback={selfFeedback}/>}
+                {feedback && <SelfFeedback selfFeedback={feedback}/>}
 
                 {/* "오늘의 질문" 버튼 또는 완료 메시지 버튼 */}
                 {isCompleteSpeech ? (
