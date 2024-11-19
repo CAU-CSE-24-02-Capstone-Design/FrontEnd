@@ -16,11 +16,13 @@ const CalendarPage = () => {
     const handleDateChange = (date) => {
         setSelectedDate(date);
         const answerId = markedDates[date.getDay() + 1];
-        navigate("/feedback", {
-            state: {
-                answerId: answerId,
-            }
-        });
+        if (answerId > 0) {
+            navigate("/feedback", {
+                state: {
+                    answerId: answerId,
+                }
+            });
+        }
     };
 
     const fetchCalendarData = async (year, month) => {
