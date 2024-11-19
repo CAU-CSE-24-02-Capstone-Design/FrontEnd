@@ -28,10 +28,9 @@ const NaverRedirectPage = () => {
 
                     if (role === "GUEST")
                         navigate("/guestrecord");
-                    else if (role === "USER"){
+                    else if (role === "USER") {
                         await getDoAnswerToday();
                         await getBeforeSelfFeedback();
-                        navigate(`/main?selfFeedback=${selfFeedback}&isCompleteSpeech=${isCompleteSpeech}`);
                     }
                 } else {
                     console.error("OAuth2 로그인 오류");
@@ -48,7 +47,7 @@ const NaverRedirectPage = () => {
         if (code) {
             handleOAuthNaver(code);
         }
-    }, [location, navigate, isCompleteSpeech, selfFeedback]); // 의존성 배열에서 navigate 추가
+    }, [location, navigate]); // 의존성 배열에서 navigate 추가
 
     const getDoAnswerToday = async () => {
         try {
@@ -89,6 +88,10 @@ const NaverRedirectPage = () => {
             console.error("이전 셀프 피드백 받아오기 실패", error);
         }
     };
+
+    useEffect(() => {
+        navigate(`/main?selfFeedback=${selfFeedback}&isCompleteSpeech=${isCompleteSpeech}`);
+    }, [selfFeedback, isCompleteSpeech, navigate]); // 상태값이 변경될 때마다 실행
 
     return <div>Processing...</div>;
 };
