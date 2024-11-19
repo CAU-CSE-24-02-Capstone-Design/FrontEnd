@@ -28,7 +28,7 @@ const Main = () => {
     const [insightComplete, setInsightComplete] = useState(false);
     const [analysisComplete, setAnalysisComplete] = useState(false);
     const [showSelfFeedback, setShowSelfFeedback] = useState(false);
-    const [showQuestionButton, setShowQuestionButton] = useState(true);
+    // const [showQuestionButton, setShowQuestionButton] = useState(true);
 
     const [answerId, setAnswerId] = useState("");
     const [audioUrl, setAudioUrl] = useState(null);
@@ -38,27 +38,27 @@ const Main = () => {
     const [selfFeedback, setSelfFeedback] = useState("");
 
     useEffect(() => {
-        const getDoAnswerToday = async () => {
-            try {
-                const response = await instance.get(`${SPRING_API_URL}/answers/completions`)
-                if (response.data.isSuccess) {
-                    if (response.data.code === "ANSWER4001" || response.data.code === "USER4002" || response.data.code === "ACCESSTOKEN4002") {
-                        console.error("오늘 답변 했는 지 여부 받아오기 API 서버 에러");
-                    } else {
-                        if (response.data.result.answerExists) {
-                            setShowQuestionButton(false);
-                        } else {
-                            setShowQuestionButton(true);
-                        }
-                        console.log("오늘 답변 했는 지 여부 받아오기 성공");
-                    }
-                } else {
-                    console.error("오늘 답변 했는 지 여부 받아오기 실패");
-                }
-            } catch (error) {
-                console.error("오늘 답변 했는 지 여부 받아오기 실패");
-            }
-        }
+        // const getDoAnswerToday = async () => {
+        //     try {
+        //         const response = await instance.get(`${SPRING_API_URL}/answers/completions`)
+        //         if (response.data.isSuccess) {
+        //             if (response.data.code === "ANSWER4001" || response.data.code === "USER4002" || response.data.code === "ACCESSTOKEN4002") {
+        //                 console.error("오늘 답변 했는 지 여부 받아오기 API 서버 에러");
+        //             } else {
+        //                 if (response.data.result.answerExists) {
+        //                     setShowQuestionButton(false);
+        //                 } else {
+        //                     setShowQuestionButton(true);
+        //                 }
+        //                 console.log("오늘 답변 했는 지 여부 받아오기 성공");
+        //             }
+        //         } else {
+        //             console.error("오늘 답변 했는 지 여부 받아오기 실패");
+        //         }
+        //     } catch (error) {
+        //         console.error("오늘 답변 했는 지 여부 받아오기 실패");
+        //     }
+        // }
 
         const getBeforeSelfFeedback = async () => {
             try {
@@ -79,7 +79,7 @@ const Main = () => {
             }
         };
 
-        getDoAnswerToday();
+        // getDoAnswerToday();
         getBeforeSelfFeedback();
     }, []);
 
@@ -146,7 +146,7 @@ const Main = () => {
                 )}
 
                 {/* "오늘의 질문" 버튼 */}
-                {showQuestionButton && !showAnalysisMessage && !showProgressTimer && !showCountdown && (
+                {!showAnalysisMessage && !showProgressTimer && !showCountdown && (
                     <button
                         onClick={handleQuestionClick}
                         className="px-6 py-4 mt-6 text-lg text-white rounded bg-primary-50 font-paperlogy-title"
@@ -155,14 +155,14 @@ const Main = () => {
                     </button>
                 )}
 
-                {/* 이미 스피치를 진행했을 때 */}
-                {!showQuestionButton && !showAnalysisMessage && !showProgressTimer && !showCountdown && (
-                    <button
-                        className="px-6 py-4 mt-6 text-lg text-white rounded bg-primary-50 font-paperlogy-title"
-                    >
-                        이미 1분 스피치를 완료했습니다!
-                    </button>
-                )}
+                {/*/!* 이미 스피치를 진행했을 때 *!/*/}
+                {/*{!showQuestionButton && !showAnalysisMessage && !showProgressTimer && !showCountdown && (*/}
+                {/*    <button*/}
+                {/*        className="px-6 py-4 mt-6 text-lg text-white rounded bg-primary-50 font-paperlogy-title"*/}
+                {/*    >*/}
+                {/*        이미 1분 스피치를 완료했습니다!*/}
+                {/*    </button>*/}
+                {/*)}*/}
 
                 {/* 질문 내용 표시 */}
                 {(showCountdown || showProgressTimer) && (

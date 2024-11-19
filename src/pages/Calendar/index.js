@@ -106,7 +106,9 @@ const CalendarPage = () => {
                                 return (
                                     <div className="relative flex items-center justify-center w-full h-full">
                                         <div
-                                            className="absolute flex items-center justify-center w-8 h-8 rounded-full bg-red-500 text-white text-sm font-semibold">
+                                            className="absolute flex items-center justify-center w-8 h-8 rounded-full bg-red-500 text-white text-sm font-semibold"
+                                            style={{top: '50%', left: '50%', transform: 'translate(-50%, -50%)'}}
+                                        >
                                             {date.getDate()}
                                         </div>
                                     </div>
