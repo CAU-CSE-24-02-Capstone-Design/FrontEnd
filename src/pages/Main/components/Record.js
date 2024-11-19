@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect, useRef, useState} from "react";
-import {getWaveBlob} from "webm-to-wav-converter";
 import {FASTAPI_API_URL, SPRING_API_URL} from "../../../constants/api";
 import instance from "../../../axios/TokenInterceptor";
+import {getWaveBlob} from "webm-to-wav-converter";
 
 const Record = ({
                     setAudioUrl,

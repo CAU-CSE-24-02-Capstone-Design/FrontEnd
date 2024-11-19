@@ -9,7 +9,7 @@ const SelfFeedbackPopup = ({isOpen, onClose}) => {
     const sendSelfFeedbackEvaluation = async () => {
         const answerId = localStorage.getItem("answerId");
         try {
-            const response = await instance.post(`${SPRING_API_URL}/self-feedbacks/evaluations?answerId=${answerId}`,
+            const response = await instance.post(`${SPRING_API_URL}/answers/evaluations?answerId=${answerId}`,
                 {evaluation: rating});
             if (response.data.isSuccess) {
                 if (response.data.code === "SELFFEEDBACK4001") {

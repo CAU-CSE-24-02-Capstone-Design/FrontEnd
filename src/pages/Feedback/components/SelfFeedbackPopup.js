@@ -10,7 +10,7 @@ const SelfFeedbackPopup = ({isOpen, onClose}) => {
         const sendSelfFeedbackEvaluation = async () => {
             const answerId = localStorage.getItem("answerId");
             try {
-                const response = await instance.get(`${SPRING_API_URL}/self-feedbacks/evaluations?answerId=${answerId}`);
+                const response = await instance.get(`${SPRING_API_URL}/answers/evaluations?answerId=${answerId}`);
                 if (response.data.isSuccess) {
                     setRating(response.data.result.evaluation);
                     console.log("셀프 피드백 평가 점수 불러오기 성공");
@@ -32,8 +32,7 @@ const SelfFeedbackPopup = ({isOpen, onClose}) => {
             <div className="bg-white rounded-lg p-6 w-[320px] text-center space-y-4">
                 <h2 className="mb-4 text-xl font-bold">평가</h2>
                 <p className="text-sm">
-                    지난번에 작성했던 셀프 피드백에 대해
-                    <br/> 어느정도 개선이 되었는지
+                    1분 스피치에 대한 스스로의 평가
                 </p>
                 <div className="flex justify-center space-x-2">
                     {[...Array(5)].map((_, index) => (
