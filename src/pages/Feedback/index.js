@@ -16,6 +16,8 @@ const Feedback = () => {
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
     const answerId = searchParams.get("answerId");
+    const date = searchParams.get("date");
+    const formattedDate = new Date(date).toISOString().split('T')[0];
 
     const [userAudioUrl, setUserAudioUrl] = useState("");
     const [aiAudioUrl, setAiAudioUrl] = useState("");
@@ -107,7 +109,7 @@ const Feedback = () => {
                     {/* 상단 메시지 */}
                     <div className="relative flex flex-col w-full max-w-md px-4 py-2 rounded-md bg-grayscale-10">
                         <p className="text-base font-paperlogy-title font-regular">
-                            오늘 하루도 복숭아멘토 챌린지 성공!
+                            {formattedDate} 스피치 기록!
                         </p>
                     </div>
 

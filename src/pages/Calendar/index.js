@@ -16,7 +16,8 @@ const CalendarPage = () => {
         setSelectedDate(date);
         const answerId = markedDates[date.getDate() - 1];
         if (answerId > 0) {
-            navigate(`/feedback?answerId=${answerId}`);
+            const formattedDate = date.toISOString().split('T')[0];
+            navigate(`/feedback?answerId=${answerId}&date=${formattedDate}`);
         } else {
             console.log("해당 날짜에 스피치를 진행하지 않았습니다.");
         }
