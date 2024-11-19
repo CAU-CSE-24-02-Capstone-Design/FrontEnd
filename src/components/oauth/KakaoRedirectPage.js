@@ -31,7 +31,6 @@ const KakaoRedirectPage = () => {
                         navigate("/guestrecord");
                     else if (role === "USER") {
                         await Promise.all([getDoAnswerToday(), getBeforeSelfFeedback()]);
-                        navigate(`/main?selfFeedback=${selfFeedback}&isCompleteSpeech=${isCompleteSpeech}`);
                     }
                 } else {
                     console.error("OAuth2 로그인 오류");
@@ -48,7 +47,7 @@ const KakaoRedirectPage = () => {
         if (code) {
             handleOAuthKakao(code);
         }
-    }, [location, navigate, isCompleteSpeech, selfFeedback]); // 의존성 배열에서 navigate 추가
+    }, [location, navigate]); // 의존성 배열에서 navigate 추가
 
     const getDoAnswerToday = async () => {
         try {
@@ -89,6 +88,11 @@ const KakaoRedirectPage = () => {
             console.error("이전 셀프 피드백 받아오기 실패", error);
         }
     };
+
+    useEffect(() => {
+        navigate(`/main?selfFeedback=${selfFeedback}&isCompleteSpeech=${isCompleteSpeech}`);
+    }, [selfFeedback, isCompleteSpeech, navigate]); // selfFeedback, isCompleteSpeech 값 변경될 때마다 호출
+
 
     return <div>Processing...</div>;
 };
