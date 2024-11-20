@@ -13,6 +13,7 @@ import RecordScript from "./pages/RecordScript";
 import "./App.css";
 import Feedback from "./pages/Feedback";
 import Speech from "./pages/Speech";
+import Loading from "./components/Loading";
 
 const App = () => {
     return (
@@ -50,6 +51,8 @@ const App = () => {
 
                     {/* 해당 날짜의 피드백 페이지 */}
                     <Route path="/feedback" element={<Feedback/>}/>
+
+                    <Route path="/loading" element={<Loading/>}/>
                 </Routes>
             </BrowserRouter>
         </div>

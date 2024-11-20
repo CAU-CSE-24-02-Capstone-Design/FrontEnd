@@ -3,6 +3,7 @@ import {useLocation, useNavigate} from "react-router-dom";
 import axios from "axios";
 import {SPRING_API_URL} from "../../constants/api";
 import instance from "../../axios/TokenInterceptor";
+import Loading from "../Loading";
 
 axios.defaults.withCredentials = true;
 
@@ -87,7 +88,11 @@ const KakaoRedirectPage = () => {
     }, [location, navigate, navigateMain]); // 의존성 배열에서 navigate 추가
 
 
-    return <div>Processing...</div>;
+    return (
+        <div>
+            <Loading/>
+        </div>
+    );
 };
 
 export default KakaoRedirectPage;
