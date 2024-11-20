@@ -1,11 +1,11 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import Header from "../../components/Header";
 import NavBar from "../../components/NavBar";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import instance from "../../axios/TokenInterceptor";
-import {SPRING_API_URL} from "../../constants/api";
-import {useNavigate} from "react-router-dom";
+import { SPRING_API_URL } from "../../constants/api";
+import { useNavigate } from "react-router-dom";
 
 const CalendarPage = () => {
     const navigate = useNavigate();
@@ -29,13 +29,13 @@ const CalendarPage = () => {
     const fetchCalendarData = async (year, month) => {
         try {
             const response = await instance.get(`${SPRING_API_URL}/calendars`, {
-                params: {year, month},
+                params: { year, month },
             });
             if (response.data.isSuccess) {
                 setMarkedDates(response.data.result);
                 console.log("달력 정보 가져오기 성공");
             } else {
-                console.error("달력 정보 가져오기 가져오기 실패", response.data.message);
+                console.error("달력 정보 가져오기 실패", response.data.message);
             }
         } catch (error) {
             console.error("달력 정보 가져오기 요청 오류", error);
@@ -48,16 +48,18 @@ const CalendarPage = () => {
         fetchCalendarData(year, month);
     }, [selectedDate]);
 
-    const getTileClassName = ({date, view}) => {
+    const getTileClassName = ({ date, view }) => {
+        const today = new Date();
+        const isWeekend = date.getDay() === 0 || date.getDay() === 6; // 주말 (0: 일요일, 6: 토요일)
+
+        // 오늘 날짜
         if (view === "month") {
-            const today = new Date();
-            // 오늘 날짜
             if (
                 date.getDate() === today.getDate() &&
                 date.getMonth() === today.getMonth() &&
                 date.getFullYear() === today.getFullYear()
             ) {
-                return "bg-pink-100 text-pink-700 font-semibold";
+                return "text-pink-700 font-semibold";
             }
             // 선택된 날짜
             if (
@@ -65,7 +67,10 @@ const CalendarPage = () => {
                 date.getMonth() === selectedDate.getMonth() &&
                 date.getFullYear() === selectedDate.getFullYear()
             ) {
-                return "bg-primary-50 text-white font-semibold";
+                return "font-semibold";
+            }
+            if (isWeekend) {
+                return "text-black"; // 검정색 텍스트
             }
         }
         return "hover:bg-grayscale-20 transition";
@@ -73,7 +78,7 @@ const CalendarPage = () => {
 
     return (
         <div className="w-full h-full max-w-[500px] mx-auto flex flex-col bg-white">
-            <Header/>
+            <Header />
             <div className="flex flex-col items-center flex-grow p-4">
                 <div className="flex justify-center items-center w-full py-4 mb-[-4px]">
                     <h1 className="px-4 py-2 text-base font-bold rounded-lg text-grayscale-90 bg-grayscale-10">
@@ -84,7 +89,7 @@ const CalendarPage = () => {
                 <div className="w-full max-w-[400px] mt-4">
                     <Calendar
                         onChange={handleDateChange} // 날짜 선택 시 상태 업데이트
-                        onActiveStartDateChange={({activeStartDate}) => {
+                        onActiveStartDateChange={({ activeStartDate }) => {
                             const year = activeStartDate.getFullYear();
                             const month = activeStartDate.getMonth() + 1;
                             fetchCalendarData(year, month);
@@ -93,32 +98,32 @@ const CalendarPage = () => {
                         className="w-full calendar-custom"
                         tileClassName={getTileClassName}
                         formatDay={(locale, date) => date.getDate()}
-                        tileContent={({date, view}) => {
-                            if (view === "month" && markedDates[date.getDate() - 1] !== 0) {
-                                // return (
-                                //     <div className="relative flex items-center justify-center px-4 py-2">
-                                //         <FaCheckCircle
-                                //             className="absolute text-green-500 bottom-1 right-1"
-                                //             size={14}
-                                //         />
-                                //     </div>
-                                // );
-                                return (
-                                    <div className="relative flex items-center justify-center w-full h-full">
-                                        <div
-                                            className="absolute flex items-center justify-center w-8 h-8 rounded-full bg-red-500 text-white text-sm font-semibold"
-                                            style={{top: '50%', left: '50%', transform: 'translate(-50%, -50%)'}}
-                                        >
-                                            {date.getDate()}
+                        tileContent={({ date, view }) => {
+                            if (view === "month") {
+                                const isMarked = markedDates[date.getDate() - 1] !== 0; // markedDates 배열을 사용하여 날짜 확인
+                                if (isMarked) {
+                                    return (
+                                        <div className="relative flex items-center justify-center px-4 py-2">
+                                            <div
+                                                className="tile-background"
+                                                style={{ backgroundImage: "url('/images/peach3.png')" }}
+                                            ></div>
+                                            <span className="date-number">{date.getDate()}</span>
                                         </div>
-                                    </div>
-                                );
+                                    );
+                                } else {
+                                    return (
+                                        <div className="flex items-center justify-center">
+                                            <span>{date.getDate()}</span>
+                                        </div>
+                                    );
+                                }
                             }
                         }}
                     />
                 </div>
             </div>
-            <NavBar/>
+            <NavBar />
 
             {/* 리액트 캘린더 라이브러리 커스텀 */}
             <style jsx>{`
@@ -133,13 +138,44 @@ const CalendarPage = () => {
                     display: flex;
                     align-items: center;
                     justify-content: center;
+                    position: relative; /* 배경 이미지를 tile 내부에서 관리 */
                 }
 
-                /* 오늘 날짜 스타일 */
+                /* 배경 이미지 추가 (워터마크처럼) */
+                .calendar-custom .react-calendar__tile .tile-background {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background-size: 100% 100%; /* 배경 이미지를 100% 크기로 설정 */
+                    background-position: center;
+                    opacity: 0.7; /* 배경 이미지 투명도 */
+                    z-index: 0; /* 이미지가 셀의 내용 아래에 위치하도록 설정 */
+                }
+
+                /* 오늘 날짜 스타일 (붉은 글씨 유지) */
                 .calendar-custom .react-calendar__tile--now {
-                    background: #ffdce5; /* 연분홍색 배경 */
-                    color: #c2185b;
-                    font-weight: bold;
+                    background: none;
+                    color: #c2185b !important; /* 붉은 색 유지 */
+                    font-weight: bold !important;
+                }
+
+                /* 선택된 날짜 스타일 */
+                .calendar-custom .react-calendar__tile--active {
+                    background-color: transparent !important;
+                    color: inherit;
+                    font-weight: inherit;
+                }
+
+                .calendar-custom .react-calendar__tile .date-number {
+                    z-index: 1;
+                    font-size: 16px;
+                }
+
+                /* 날짜 숫자 제거 */
+                .calendar-custom .react-calendar__tile abbr {
+                    display: none; /* 기본 날짜 숫자 숨기기 */
                 }
             `}</style>
         </div>

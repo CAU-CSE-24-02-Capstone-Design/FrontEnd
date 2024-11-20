@@ -6,12 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="b5dda6d2-e76f-446c-9c6c-4e3d50c35be1" name="Changes" comment="fix: nginx swagger 경로 수정">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Header.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Header.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/NavBar.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/NavBar.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/oauth/GoogleRedirectPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/oauth/GoogleRedirectPage.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/oauth/KakaoRedirectPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/oauth/KakaoRedirectPage.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/oauth/NaverRedirectPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/oauth/NaverRedirectPage.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/GuestRecord/components/GuestRecord.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/GuestRecord/components/GuestRecord.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Calendar/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Calendar/index.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -44,9 +39,9 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "dev",
+    "git-widget-placeholder": "feat/record",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "/Users/hyun/Documents/FrontEnd/src/pages/RecordScript/components",
+    "last_opened_file_path": "/Users/hyun/Documents/FrontEnd/public/images",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -63,11 +58,11 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/public/images" />
       <recent name="$PROJECT_DIR$/src/pages/RecordScript/components" />
       <recent name="$PROJECT_DIR$/src/pages/Feedback/components" />
       <recent name="$PROJECT_DIR$/src/pages/Speech" />
       <recent name="$PROJECT_DIR$/src/pages/Speech/components" />
-      <recent name="$PROJECT_DIR$/src/pages/Feedback" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/pages/Main/components" />
@@ -161,7 +156,7 @@
       <workItem from="1731469978651" duration="1166000" />
       <workItem from="1732017101583" duration="17956000" />
       <workItem from="1732072863327" duration="4801000" />
-      <workItem from="1732084899125" duration="5504000" />
+      <workItem from="1732084899125" duration="11665000" />
     </task>
     <task id="LOCAL-00001" summary="fix: nginx swagger 경로 추가">
       <option name="closed" value="true" />
