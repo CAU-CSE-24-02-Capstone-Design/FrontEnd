@@ -11,25 +11,26 @@ const Header = () => {
         let isCompleteSpeech = false;
         let selfFeedback = null;
 
-        try {
-            const response = await instance.get(`${SPRING_API_URL}/answers/completions`)
-            if (response.data.isSuccess) {
-                if (response.data.code === "ANSWER4001" || response.data.code === "USER4002" || response.data.code === "ACCESSTOKEN4002") {
-                    console.error("오늘 답변 했는 지 여부 받아오기 API 서버 에러");
-                } else {
-                    if (response.data.result.answerExists) {
-                        isCompleteSpeech = true;
-                    } else {
-                        isCompleteSpeech = false;
-                    }
-                    console.log("오늘 답변 했는 지 여부 받아오기 성공");
-                }
-            } else {
-                console.error("오늘 답변 했는 지 여부 받아오기 실패");
-            }
-        } catch (error) {
-            console.error("오늘 답변 했는 지 여부 받아오기 실패");
-        }
+        // try {
+        //     const response = await instance.get(`${SPRING_API_URL}/answers/completions`)
+        //     if (response.data.isSuccess) {
+        //         if (response.data.code === "ANSWER4001" || response.data.code === "USER4002" || response.data.code === "ACCESSTOKEN4002") {
+        //             console.error("오늘 답변 했는 지 여부 받아오기 API 서버 에러");
+        //         } else {
+        //             if (response.data.result.answerExists) {
+        //                 isCompleteSpeech = true;
+        //             } else {
+        //                 isCompleteSpeech = false;
+        //             }
+        //             console.log("오늘 답변 했는 지 여부 받아오기 성공");
+        //         }
+        //     } else {
+        //         console.error("오늘 답변 했는 지 여부 받아오기 실패");
+        //     }
+        // } catch (error) {
+        //     console.error("오늘 답변 했는 지 여부 받아오기 실패");
+        // }
+
         try {
             const response = await instance.get(`${SPRING_API_URL}/self-feedbacks/latest-feedbacks`);
             if (response.data.isSuccess) {

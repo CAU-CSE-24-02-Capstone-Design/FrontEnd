@@ -64,6 +64,7 @@ const GuestRecord = () => {
                 const wavBlob = await getWaveBlob(e.data, true);
                 const url = URL.createObjectURL(wavBlob); // Blob을 URL로 변환
                 setAudioUrl(url); // audioUrl 상태에 설정
+                setIsRecording(false); // 녹음이 끝나면 isRecording을 false로 설정
                 sendAudioFile(wavBlob); // 녹음된 오디오 파일 전송
             }
         };
@@ -77,8 +78,6 @@ const GuestRecord = () => {
                 audioContextRef.current = null; // AudioContext를 닫은 후 null로 설정
             });
         }
-
-        setIsRecording(false); // 녹음이 끝나면 isRecording을 false로 설정
     };
 
     // 오디오 파일 fastapi 서버로 전달하기
@@ -126,12 +125,22 @@ const GuestRecord = () => {
             )}
 
             {/* 녹음 버튼 */}
-            {!audioUrl && (
+            {!audioUrl && !isRecording && (
                 <button
-                    onClick={isRecording ? offRecAudio : onRecAudio}
+                    onClick={onRecAudio}
                     className="px-6 py-3 mt-10 text-base font-semibold text-white rounded-full bg-primary-50"
                 >
-                    {isRecording ? "녹음 중지" : "녹음 시작"}
+                    녹음 시작
+                </button>
+            )}
+
+            {/* 녹음 중지 버튼 */}
+            {isRecording && (
+                <button
+                    onClick={offRecAudio}
+                    className="px-6 py-3 mt-10 text-base font-semibold text-white rounded-full bg-primary-50"
+                >
+                    녹음 중지
                 </button>
             )}
 
