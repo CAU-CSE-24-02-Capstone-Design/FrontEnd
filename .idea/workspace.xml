@@ -4,7 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b5dda6d2-e76f-446c-9c6c-4e3d50c35be1" name="Changes" comment="fix: nginx swagger 경로 수정" />
+    <list default="true" id="b5dda6d2-e76f-446c-9c6c-4e3d50c35be1" name="Changes" comment="fix: nginx swagger 경로 수정">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Header.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Header.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/NavBar.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/NavBar.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/oauth/GoogleRedirectPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/oauth/GoogleRedirectPage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/oauth/KakaoRedirectPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/oauth/KakaoRedirectPage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/oauth/NaverRedirectPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/oauth/NaverRedirectPage.js" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -36,7 +43,7 @@
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;design/1stQA&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;dev&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;/Users/hyun/Documents/FrontEnd/src/pages/RecordScript/components&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
@@ -155,6 +162,8 @@
       <workItem from="1732017101583" duration="17956000" />
       <workItem from="1732072863327" duration="4801000" />
       <workItem from="1732084899125" duration="11665000" />
+      <workItem from="1732443088271" duration="599000" />
+      <workItem from="1732546370442" duration="4417000" />
     </task>
     <task id="LOCAL-00001" summary="fix: nginx swagger 경로 추가">
       <option name="closed" value="true" />
