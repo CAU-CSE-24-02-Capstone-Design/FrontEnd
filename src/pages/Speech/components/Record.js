@@ -162,9 +162,8 @@ const Record = ({
         <>
             <button
                 onClick={offRecAudio}
-                className={`px-8 py-3 mt-10 text-lg font-semibold text-white rounded-full bg-primary-50 ${
-                    !canStop ? "bg-grayscale-50 cursor-not-allowed" : ""
-                }`}
+                className={`px-8 py-3 mt-10 text-lg font-semibold text-white rounded-full 
+                ${!canStop ? "bg-grayscale-50 cursor-not-allowed" : "bg-primary-50"}`}
                 disabled={!canStop}
             >
                 녹음 완료
