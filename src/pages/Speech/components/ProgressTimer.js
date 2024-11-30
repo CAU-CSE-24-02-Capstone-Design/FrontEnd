@@ -1,34 +1,32 @@
 import React, {useEffect, useState} from "react";
 
-const ProgressTimer = ({duration, onTimeUp}) => {
+const ProgressTimer = ({level, onTimeUp}) => {
     const [progress, setProgress] = useState(100); // 초기 게이지를 100%로 설정
 
-    // useEffect(() => {
-    //     const interval = setInterval(() => {
-    //         setProgress((prev) => {
-    //             const newProgress = prev - 100 / (duration * 60); // 1초마다 게이지 감소
-    //             if (newProgress <= 0) {
-    //                 clearInterval(interval);
-    //                 onTimeUp();
-    //                 return 0;
-    //             }
-    //             return newProgress;
-    //         });
-    //     }, 1000);
-    //
-    //     return () => clearInterval(interval);
-    // }, [duration, onTimeUp]);
+    const getDurationInSeconds = (level) => {
+        switch (level) {
+            case "1":
+                return 30;
+            case "2":
+                return 60;
+            case "3":
+                return 120;
+            default:
+                return 60;
+        }
+    };
 
     useEffect(() => {
+        const durationInSeconds = getDurationInSeconds(level);
         const interval = setInterval(() => {
             setProgress((prev) => {
-                const newProgress = prev - 100 / (duration * 60);
+                const newProgress = prev - 100 / (durationInSeconds);
                 return newProgress > 0 ? newProgress : 0;
             });
         }, 1000);
 
         return () => clearInterval(interval);
-    }, [duration]);
+    }, [level]);
 
     useEffect(() => {
         if (progress <= 0) {
