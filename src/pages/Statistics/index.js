@@ -73,7 +73,7 @@ const StatisticsPage = () => {
 
     const handleLevelButton = async (level) => {
         try {
-            const response = await instance.get(`${SPRING_API_URL}/statistics?level=${level}`);
+            const response = await instance.get(`${SPRING_API_URL}/statistics/levels?level=${level}`);
             if (response.data.isSuccess) {
                 if (response.data.code === "STATISTICS2001") {
                     statisticsDataRef.currnt = response.data.result.map(item => ({
