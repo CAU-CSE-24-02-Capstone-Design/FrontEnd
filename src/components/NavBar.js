@@ -77,7 +77,7 @@ const NavBar = () => {
 
         let analysisText = "";
         try {
-            const response = await instance.get(`${SPRING_API_URL}/analysis/`);
+            const response = await instance.get(`${SPRING_API_URL}/analysis`);
             if (response.data.isSuccess) {
                 if (response.data.code === "STATISTICS2003") {
                     analysisText = response.data.result.analysisText;

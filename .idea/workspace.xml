@@ -4,13 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b5dda6d2-e76f-446c-9c6c-4e3d50c35be1" name="Changes" comment="fix: nginx swagger 경로 수정">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/NavBar.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/NavBar.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Calendar/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Calendar/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/RecordScript/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/RecordScript/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Statistics/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Statistics/index.js" afterDir="false" />
-    </list>
+    <list default="true" id="b5dda6d2-e76f-446c-9c6c-4e3d50c35be1" name="Changes" comment="fix: nginx swagger 경로 수정" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -166,7 +160,7 @@
       <workItem from="1732546370442" duration="5846000" />
       <workItem from="1732800334474" duration="3847000" />
       <workItem from="1732949692757" duration="13935000" />
-      <workItem from="1732983970529" duration="11868000" />
+      <workItem from="1732983970529" duration="12312000" />
     </task>
     <task id="LOCAL-00001" summary="fix: nginx swagger 경로 추가">
       <option name="closed" value="true" />
