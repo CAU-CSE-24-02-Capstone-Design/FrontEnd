@@ -5,17 +5,20 @@ import {Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis,} from "rech
 import {useLocation} from "react-router-dom";
 import instance from "../../axios/TokenInterceptor";
 import {SPRING_API_URL} from "../../constants/api";
+import AnalysisReport from "./components/AnalysisReport";
 
 const StatisticsPage = () => {
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
     const encodedStatisticsData = searchParams.get("statisticsData");
+    const encodedAnalysisText = searchParams.get("analysisText");
 
     const [activeKey, setActiveKey] = useState("추임새"); // 디폴트는 추임새
     const [scrollPosition, setScrollPosition] = useState(0);
     const scrollRef = React.useRef(null);
     const [statisticsData, setStatisticsData] = useState([]);
     const [level, setLevel] = useState(4);
+    const [analysisText, setAnalysisText] = useState("");
 
     // 페이지 렌더링 후 가장 최근 데이터가 보이도록 스크롤 조정
     useEffect(() => {
@@ -27,7 +30,17 @@ const StatisticsPage = () => {
                 console.error("Invalid statistics data:", error);
             }
         }
-    }, [encodedStatisticsData]);
+
+        if (encodedAnalysisText) {
+            try {
+                const parsedData = JSON.parse(decodeURIComponent(encodedAnalysisText));
+                setAnalysisText(parsedData);
+            } catch (error) {
+                console.error("Invalid AnalysisText data:", error);
+            }
+        }
+
+    }, [encodedStatisticsData, encodedAnalysisText]);
 
     const handleDragScroll = (event) => {
         const isTouch = event.type === "touchstart" || event.type === "touchmove";
@@ -217,6 +230,9 @@ const StatisticsPage = () => {
                         침묵시간
                     </button>
                 </div>
+                <AnalysisReport
+                    analysisText={analysisText}
+                />
             </div>
             <NavBar/>
             {/* 그래프 좌우 스크롤바 숨김 처리 */}
