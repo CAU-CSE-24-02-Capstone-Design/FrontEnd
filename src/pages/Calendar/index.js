@@ -12,7 +12,6 @@ const CalendarPage = () => {
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [markedDates, setMarkedDates] = useState(new Array(32).fill(null));
 
-
     const handleDateChange = (date) => {
         setSelectedDate(date);
 

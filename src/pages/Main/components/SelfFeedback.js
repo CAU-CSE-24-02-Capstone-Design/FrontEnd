@@ -11,7 +11,7 @@ const SelfFeedback = ({ selfFeedback }) => {
   };
 
   return (
-    <div className="w-[75%] px-4 py-3 bg-grayscale-05 border-2 rounded-lg border-grayscale-10">
+    <div className="w-[80%] px-4 py-3 bg-grayscale-05 border-2 rounded-lg border-grayscale-10">
       <div class="mb-2 text-lg font-bold text-center font-paperlogy-title text-grayscale-100">
         ✉️ 셀프 피드백이 도착했어요 ✉️
       </div>
