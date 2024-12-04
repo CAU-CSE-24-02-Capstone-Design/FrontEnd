@@ -16,7 +16,7 @@ const CalendarPage = () => {
     const handleDateChange = (date) => {
         setSelectedDate(date);
 
-        const answerId = markedDates[date.getDate() - 1];
+        const answerId = markedDates[date.getDate() - 1].answerId;
         if (answerId > 0) {
             const newDate = new Date(date);
             newDate.setDate(newDate.getDate() + 1);
