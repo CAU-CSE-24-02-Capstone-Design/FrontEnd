@@ -164,6 +164,7 @@ const StatisticsPage = () => {
                                     tickLine={false}
                                     interval={0}
                                     padding={{left: 0, right: 0}}
+                                    scale="band"
                                 />
                                 {/* 커스텀 Tooltip */}
                                 <Tooltip
