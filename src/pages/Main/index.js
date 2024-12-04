@@ -7,8 +7,7 @@ import { SPRING_API_URL } from "../../constants/api";
 import instance from "../../axios/TokenInterceptor";
 import { useLocation, useNavigate } from "react-router-dom";
 import SelfFeedback from "./components/SelfFeedback";
-
-// import "./style/button.css";
+import StartPopup from "./components/StartPopup";
 
 const Main = () => {
   const navigate = useNavigate();
@@ -19,8 +18,18 @@ const Main = () => {
   const isCompleteSpeech = searchParams.get("isCompleteSpeech") === "true";
   const [level, setLevel] = useState(1);
   const [canStop, setCanStop] = useState(true);
+  const [isPopupOpen, setIsPopupOpen] = useState(false); // 시작 전 셀프 피드백 팝업 상태 관리
 
   const handleQuestionClick = async () => {
+    setIsPopupOpen(true); // 팝업 열기
+  };
+
+  const handlePopupClose = () => {
+    setIsPopupOpen(false); // 팝업 닫기
+  };
+
+  const handlePopupStart = async () => {
+    setIsPopupOpen(false); // 팝업 닫기
     try {
       const response = await instance.get(
         `${SPRING_API_URL}/questions?level=${level}`
@@ -79,16 +88,9 @@ const Main = () => {
           </button>
         ) : (
           <>
-            {/* 진행 안내문 */}
-            <p className="mt-8 text-base font-paperlogy-title text-grayscale-90">
-              아래 버튼 클릭 후 10초 뒤 스피치가 시작됩니다!
-            </p>
-            <p className="mt-4 text-base font-paperlogy-title text-grayscale-90">
-              {getLevelMessage()}
-            </p>
             <button
               onClick={handleQuestionClick}
-              className="relative px-6 py-4 mt-6 text-lg text-white transition-all duration-300 shadow-md rounded-2xl bg-primary-40 font-paperlogy-title hover:scale-110 hover:shadow-lg hover:bg-primary-50 focus:outline-none focus:ring-4 focus:ring-primary-50 active:scale-95"
+              className="relative px-10 py-4 mt-6 text-xl text-white transition-all duration-300 shadow-md rounded-2xl bg-primary-40 font-paperlogy-title hover:scale-110 hover:shadow-lg hover:bg-primary-50 focus:outline-none focus:ring-4 focus:ring-primary-50 active:scale-95"
             >
               오늘의 질문
               <div className="absolute inset-x-0 bottom-0 h-3 transition-opacity duration-300 rounded-full opacity-0 bg-gradient-to-r from-blue-200 via-blue-300 to-blue-400 blur-md hover:opacity-100"></div>
@@ -96,50 +98,55 @@ const Main = () => {
           </>
         )}
 
-      {/* 메인 시작 페이지 돋보기 애니메이션 */}
-          <div className="w-3/4 mt-8">
-              <Lottie
-                  loop
-                  animationData={mainAnimations}
-                  play
-                  style={{width: "100%", height: "auto"}}
-              />
-          </div>
-          {!isCompleteSpeech && (
-              <>
-                  <p className="mt-8 text-base font-paperlogy-title text-grayscale-90">
-                      오늘 진행할 스피치의 난이도를 선택하세요!
-                  </p>
-                  <div className="flex space-x-4 mt-6">
-                      <button
-                          onClick={() => setLevel(1)}
-                          className={buttonStyle(1)}
-                      >
-                          1
-                      </button>
-                      <button
-                          onClick={() => setLevel(2)}
-                          className={buttonStyle(2)}
-                      >
-                          2
-                      </button>
-                      <button
-                          onClick={() => setLevel(3)}
-                          className={buttonStyle(3)}
-                      >
-                          3
-                      </button>
-                      <button
-                          onClick={() => setCanStop(!canStop)}
-                          className={`px-4 py-2 text-white rounded-md ${canStop ? 'bg-green-500' : 'bg-red-500'} hover:bg-opacity-80`}
-                      >
-                          {canStop ? 'On' : 'Off'}
-                      </button>
-                  </div>
-              </>
-          )}
+        {/* 메인 시작 페이지 돋보기 애니메이션 */}
+        <div className="w-3/4 mt-8">
+          <Lottie
+            loop
+            animationData={mainAnimations}
+            play
+            style={{ width: "100%", height: "auto" }}
+          />
+        </div>
+        {!isCompleteSpeech && (
+          <>
+            <p className="mt-8 text-base font-paperlogy-title text-grayscale-90">
+              오늘 진행할 스피치의 난이도를 선택하세요!
+            </p>
+            <p className="mt-4 text-sm font-paperlogy-heading text-grayscale-90">
+              {getLevelMessage()}
+            </p>
+            <div className="flex mt-6 space-x-4">
+              <button onClick={() => setLevel(1)} className={buttonStyle(1)}>
+                1
+              </button>
+              <button onClick={() => setLevel(2)} className={buttonStyle(2)}>
+                2
+              </button>
+              <button onClick={() => setLevel(3)} className={buttonStyle(3)}>
+                3
+              </button>
+              <button
+                onClick={() => setCanStop(!canStop)}
+                className={`px-4 py-2 text-white rounded-md ${
+                  canStop ? "bg-green-500" : "bg-red-500"
+                } hover:bg-opacity-80`}
+              >
+                {canStop ? "On" : "Off"}
+              </button>
+            </div>
+          </>
+        )}
       </main>
       <NavBar />
+
+      {/* 시작 전 셀프 피드백을 보여주는 팝업 */}
+      {isPopupOpen && (
+        <StartPopup
+          selfFeedback={feedback}
+          onClose={handlePopupClose}
+          onStart={handlePopupStart}
+        />
+      )}
     </div>
   );
 };
