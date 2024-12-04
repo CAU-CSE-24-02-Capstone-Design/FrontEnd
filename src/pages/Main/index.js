@@ -103,7 +103,6 @@ const Main = () => {
                         style={{width: "100%", height: "auto"}}
                     />
                 </div>
-
                 {!isCompleteSpeech && (
                     <>
                         <p className="mt-8 text-base font-paperlogy-title text-grayscale-90">

@@ -1,34 +1,46 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, {useEffect, useState} from "react";
 import Header from "../../components/Header";
 import NavBar from "../../components/NavBar";
 import {Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis,} from "recharts";
-import {useLocation} from "react-router-dom"; // 임시 더미 데이터
+import {useLocation} from "react-router-dom";
+import instance from "../../axios/TokenInterceptor";
+import {SPRING_API_URL} from "../../constants/api";
+import AnalysisReport from "./components/AnalysisReport";
 
 const StatisticsPage = () => {
+    const location = useLocation();
+    const searchParams = new URLSearchParams(location.search);
+    const encodedStatisticsData = searchParams.get("statisticsData");
+    const encodedAnalysisText = searchParams.get("analysisText");
+
     const [activeKey, setActiveKey] = useState("추임새"); // 디폴트는 추임새
     const [scrollPosition, setScrollPosition] = useState(0);
     const scrollRef = React.useRef(null);
-    const location = useLocation();
-    const statisticsDataRef = useRef([]);
+    const [statisticsData, setStatisticsData] = useState([]);
+    const [level, setLevel] = useState(4);
+    const [analysisText, setAnalysisText] = useState("");
 
     // 페이지 렌더링 후 가장 최근 데이터가 보이도록 스크롤 조정
     useEffect(() => {
-        const searchParams = new URLSearchParams(location.search);
-        const encodedStatisticsData = searchParams.get("statisticsData");
-
         if (encodedStatisticsData) {
             try {
-                statisticsDataRef.current = JSON.parse(decodeURIComponent(encodedStatisticsData));
-                console.log(statisticsDataRef.current);
+                const parsedData = JSON.parse(decodeURIComponent(encodedStatisticsData));
+                setStatisticsData(parsedData);
             } catch (error) {
-                console.error("통계 데이터 디코딩 실패:", error);
+                console.error("Invalid statistics data:", error);
             }
         }
 
-        if (scrollRef.current) {
-            scrollRef.current.scrollLeft = scrollRef.current.scrollWidth;
+        if (encodedAnalysisText) {
+            try {
+                const parsedData = JSON.parse(decodeURIComponent(encodedAnalysisText));
+                setAnalysisText(parsedData);
+            } catch (error) {
+                console.error("Invalid AnalysisText data:", error);
+            }
         }
-    }, [location]);
+
+    }, [encodedStatisticsData, encodedAnalysisText]);
 
     const handleDragScroll = (event) => {
         const isTouch = event.type === "touchstart" || event.type === "touchmove";
@@ -40,6 +52,58 @@ const StatisticsPage = () => {
         setScrollPosition(clientX);
     };
 
+    const buttonStyle = (buttonLevel) => {
+        return level === buttonLevel
+            ? "px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-500"
+            : "px-4 py-2 bg-grayscale-20 text-gray-700 rounded-md ";
+    };
+
+    const handleWholeButton = async () => {
+        try {
+            const response = await instance.get(
+                `${SPRING_API_URL}/statistics`
+            );
+            if (response.data.isSuccess) {
+                if (response.data.code === "STATISTICS2001") {
+                    setStatisticsData(response.data.result.map(item => ({
+                        day: item.day, // 날짜 그대로 사용
+                        추임새: item.gantourCount, // 'gantourCount' 값을 '추임새'로 변환
+                        침묵시간: item.silentTime // 'silentTime' 값을 '침묵시간'으로 변환
+                    })));
+                    console.log("통계 데이터 받아오기 성공");
+                } else if (response.data.code === "STATISTICS4001") {
+                    console.error("통계 데이터 받아오기 실패");
+                }
+            }
+        } catch (error) {
+            console.error("통계 데이터 받아오기 실패");
+        }
+    }
+
+    const handleLevelButton = async (level) => {
+        try {
+            const response = await instance.get(`${SPRING_API_URL}/statistics/levels?level=${level}`);
+            if (response.data.isSuccess) {
+                if (response.data.code === "STATISTICS2001") {
+                    setStatisticsData(response.data.result.map(item => ({
+                        day: item.day, // 날짜 그대로 사용
+                        추임새: item.gantourCount, // 'gantourCount' 값을 '추임새'로 변환
+                        침묵시간: item.silentTime // 'silentTime' 값을 '침묵시간'으로 변환
+                    })));
+                } else if (response.data.code === "STATISTICS4001") {
+                    console.error("난이도별 통계 데이터 받아오기 실패");
+                }
+                console.log("난이도별 통계 데이터 받아오기 성공");
+            } else {
+                console.error("난이도별 통계 데이터 받아오기 오류");
+                console.log(response.data.code);
+                console.log(response.data.message);
+            }
+        } catch (error) {
+            console.error("난이도별 통계 데이터 받아오기 오류");
+        }
+    }
+
     return (
         <div className="w-full h-full max-w-[500px] mx-auto flex flex-col bg-white">
             <Header/>
@@ -50,7 +114,6 @@ const StatisticsPage = () => {
                 <p className="mb-4 text-sm text-grayscale-90 font-paperlogy-title">
                     좌우로 스크롤 하면 이전 기록을 한 번에 확인할 수 있어요
                 </p>
-
                 {/* 그래프 영역 */}
                 <div
                     className="w-full max-w-[400px] overflow-x-auto scrollbar-hide relative flex border rounded-3xl px-2"
@@ -65,7 +128,7 @@ const StatisticsPage = () => {
                     {/* Y축 */}
                     <div className="w-[50px] h-[300px] sticky left-0 z-10 bg-white">
                         <ResponsiveContainer width="100%" height={300}>
-                            <LineChart data={statisticsDataRef.current}>
+                            <LineChart data={statisticsData}>
                                 <YAxis
                                     width={50}
                                     tick={{fontSize: 12, fill: "#333"}}
@@ -80,7 +143,7 @@ const StatisticsPage = () => {
                     <div className="flex-grow h-full">
                         <ResponsiveContainer width={700} height={300}>
                             <LineChart
-                                data={statisticsDataRef.current}
+                                data={statisticsData}
                                 margin={{top: 20, right: 20, left: 20, bottom: 10}}
                             >
                                 {/* 그래프 선 */}
@@ -120,6 +183,30 @@ const StatisticsPage = () => {
                         </ResponsiveContainer>
                     </div>
                 </div>
+                {/* 상단 범위 선택 버튼 */}
+                <div className="flex space-x-4 mt-6">
+                    {[1, 2, 3].map((level) => (
+                        <button
+                            key={level}
+                            onClick={() => {
+                                setLevel(level);
+                                handleLevelButton(level);
+                            }}
+                            className={buttonStyle(level)}
+                        >
+                            {level}
+                        </button>
+                    ))}
+                    <button
+                        onClick={() => {
+                            setLevel(4);
+                            handleWholeButton();
+                        }}
+                        className={buttonStyle(4)}
+                    >
+                        전체
+                    </button>
+                </div>
                 {/* 분석 종류 버튼 */}
                 <div className="flex justify-center mt-4 space-x-4">
                     <button
@@ -143,6 +230,9 @@ const StatisticsPage = () => {
                         침묵시간
                     </button>
                 </div>
+                <AnalysisReport
+                    analysisText={analysisText}
+                />
             </div>
             <NavBar/>
             {/* 그래프 좌우 스크롤바 숨김 처리 */}

@@ -11,12 +11,12 @@ const NavBar = () => {
         let selfFeedback = null;
 
         try {
-            const response = await instance.get(`${SPRING_API_URL}/answers/completions`)
+            const response = await instance.get(`${SPRING_API_URL}/feedbacks/completions`)
             if (response.data.isSuccess) {
-                if (response.data.code === "ANSWER4001" || response.data.code === "USER4002" || response.data.code === "ACCESSTOKEN4002") {
+                if (response.data.code === "USER4002" || response.data.code === "ACCESSTOKEN4002") {
                     console.error("오늘 답변 했는 지 여부 받아오기 API 서버 에러");
                 } else {
-                    if (response.data.result.answerExists) {
+                    if (response.data.result.speechExists) {
                         isCompleteSpeech = true;
                     } else {
                         isCompleteSpeech = false;
@@ -75,7 +75,24 @@ const NavBar = () => {
             console.error("통계 데이터 받아오기 실패");
         }
 
-        navigate(`/statistics?statisticsData=${encodeURIComponent(JSON.stringify(statisticsData))}`);
+        let analysisText = "";
+        try {
+            const response = await instance.get(`${SPRING_API_URL}/analysis`);
+            if (response.data.isSuccess) {
+                if (response.data.code === "STATISTICS2003") {
+                    analysisText = response.data.result.analysisText;
+                    console.log("유저 7일 분석 레포트 받아오기 완료");
+                } else {
+                    console.error("유저 7일 분석 레포트 받아오기 api 오류");
+                }
+            } else {
+                console.error("서버 에러");
+            }
+        } catch (error) {
+            console.error("유저 7일 분석 레포트 받아오기 실패");
+        }
+
+        navigate(`/statistics?statisticsData=${encodeURIComponent(JSON.stringify(statisticsData))}&analysisText=${encodeURIComponent(JSON.stringify(analysisText))}`);
     }
 
     return (

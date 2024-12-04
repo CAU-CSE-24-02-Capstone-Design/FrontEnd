@@ -12,6 +12,7 @@ const CalendarPage = () => {
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [markedDates, setMarkedDates] = useState(new Array(32).fill(null));
 
+
     const handleDateChange = (date) => {
         setSelectedDate(date);
 
@@ -122,7 +123,6 @@ const CalendarPage = () => {
                                     markedData &&
                                     markedData.date.toDateString() === date.toDateString() && // 날짜 비교 (문자열 형태)
                                     markedData.answerId !== 0;
-                                // const isMarked = markedDates[date.getDate() - 1].date === date && markedDates[date.getDate() - 1].answerId !== 0; // markedDates 배열을 사용하여 날짜 확인
                                 if (isMarked) {
                                     return (
                                         <div className="relative flex items-center justify-center px-4 py-2">
