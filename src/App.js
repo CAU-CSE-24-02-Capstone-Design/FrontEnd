@@ -16,8 +16,10 @@ import Speech from "./pages/Speech";
 import Loading from "./components/Loading";
 
 const App = () => {
+
     return (
-        <div className="App bg-[#f9f9f9] min-h-screen flex flex-col justify-center items-center">
+        <div
+            className="App bg-[#f9f9f9] min-h-screen flex flex-col justify-center items-center">
             <BrowserRouter>
                 <Routes>
                     <Route path="/" element={<Login/>}/>

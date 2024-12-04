@@ -39,6 +39,7 @@ const CalendarPage = () => {
                         updatedDates[index] = {date: fullDate, answerId}; // 날짜와 answerId를 객체로 저장
                     }
                 });
+                console.log(updatedDates);
                 setMarkedDates(updatedDates);
                 console.log("달력 정보 가져오기 성공");
             } else {
@@ -123,6 +124,8 @@ const CalendarPage = () => {
                                     markedData.date.toDateString() === date.toDateString() && // 날짜 비교 (문자열 형태)
                                     markedData.answerId !== 0;
                                 if (isMarked) {
+                                    console.log(date);
+                                    console.log(markedData.date)
                                     return (
                                         <div className="relative flex items-center justify-center px-4 py-2">
                                             <div
