@@ -7,41 +7,50 @@ import {SPRING_API_URL} from "../../constants/api";
 import instance from "../../axios/TokenInterceptor";
 import {useLocation, useNavigate} from "react-router-dom";
 import SelfFeedback from "./components/SelfFeedback";
-
-// import "./style/button.css";
+import StartPopup from "./components/StartPopup";
 
 const Main = () => {
-    const navigate = useNavigate();
-    const location = useLocation();
-    const searchParams = new URLSearchParams(location.search);
-    const selfFeedback = searchParams.get("selfFeedback");
-    const feedback = selfFeedback === "null" ? null : selfFeedback; // "null" 문자열을 null로 변환
-    // const isCompleteSpeech = searchParams.get("isCompleteSpeech") === "true";
-    const [level, setLevel] = useState(1);
-    const [canStop, setCanStop] = useState(true);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const selfFeedback = searchParams.get("selfFeedback");
+  const feedback = selfFeedback === "null" ? null : selfFeedback; // "null" 문자열을 null로 변환
+  const isCompleteSpeech = searchParams.get("isCompleteSpeech") === "true";
+  const [level, setLevel] = useState(1);
+  const [canStop, setCanStop] = useState(true);
+  const [isPopupOpen, setIsPopupOpen] = useState(false); // 시작 전 셀프 피드백 팝업 상태 관리
 
-    const handleQuestionClick = async () => {
-        try {
-            const response = await instance.get(
-                `${SPRING_API_URL}/questions?level=${level}`
-            );
-            if (response.data.isSuccess) {
-                const questionText = response.data.result.questionDescription;
-                const answerId = response.data.result.answerId;
-                console.log("질문 받아오기 성공");
-                localStorage.setItem("answerId", answerId);
-                navigate(
-                    `/speech?answerId=${answerId}&questionText=${questionText}&level=${level}&canStop=${canStop}`
-                );
-            } else {
-                console.error("질문 받아오기 오류");
-                console.log(response.data.code);
-                console.log(response.data.message);
-            }
-        } catch (error) {
-            console.error("질문 받아오기 실패");
-        }
-    };
+  const handleQuestionClick = async () => {
+    setIsPopupOpen(true); // 팝업 열기
+  };
+
+  const handlePopupClose = () => {
+    setIsPopupOpen(false); // 팝업 닫기
+  };
+
+  const handlePopupStart = async () => {
+    setIsPopupOpen(false); // 팝업 닫기
+    try {
+      const response = await instance.get(
+        `${SPRING_API_URL}/questions?level=${level}`
+      );
+      if (response.data.isSuccess) {
+        const questionText = response.data.result.questionDescription;
+        const answerId = response.data.result.answerId;
+        console.log("질문 받아오기 성공");
+        localStorage.setItem("answerId", answerId);
+        navigate(
+          `/speech?answerId=${answerId}&questionText=${questionText}&level=${level}&canStop=${canStop}`
+        );
+      } else {
+        console.error("질문 받아오기 오류");
+        console.log(response.data.code);
+        console.log(response.data.message);
+      }
+    } catch (error) {
+      console.error("질문 받아오기 실패");
+    }
+  };
 
     const getLevelMessage = () => {
         switch (level) {
@@ -66,9 +75,6 @@ const Main = () => {
         <div className="w-full h-full max-w-[500px] mx-auto flex flex-col bg-white">
             <Header/>
             <main className="flex flex-col items-center justify-center flex-grow px-4">
-                {/* 이전 스피치에서의 셀프 피드백 */}
-                {feedback && <SelfFeedback selfFeedback={feedback}/>}
-
                 {/*/!* "오늘의 질문" 버튼 또는 완료 메시지 버튼 *!/*/}
                 {/*{isCompleteSpeech ? (*/}
                 {/*    <button*/}
@@ -187,6 +193,15 @@ const Main = () => {
                         </button>
                     </div>
                 </>
+                
+                {/* 시작 전 셀프 피드백을 보여주는 팝업 */}
+                {isPopupOpen && (
+                  <StartPopup
+                    selfFeedback={feedback}
+                    onClose={handlePopupClose}
+                    onStart={handlePopupStart}
+                  />
+                )}
             </main>
             <NavBar/>
         </div>
