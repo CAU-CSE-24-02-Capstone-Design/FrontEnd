@@ -4,7 +4,7 @@ const GuestGuide = ({ onClose }) => {
   const [currentStep, setCurrentStep] = useState(1);
 
   const handleNext = () => {
-    if (currentStep < 7) {
+    if (currentStep < 11) {
       setCurrentStep(currentStep + 1);
     }
   };
@@ -22,9 +22,13 @@ const GuestGuide = ({ onClose }) => {
     "/webp/guide04.webp",
     "/webp/guide05.webp",
     "/webp/guide06.webp",
+    "/webp/guide07.webp",
+    "/webp/guide08.webp",
+    "/webp/guide09.webp",
+    "/webp/guide10.webp",
   ];
 
-  const isLastStep = currentStep === 7; // 가이드 마지막 단계 확인
+  const isLastStep = currentStep === 11; // 가이드 마지막 단계 확인
 
   const commonButtonClass =
     "absolute w-12 h-12 bg-grayscale-10 rounded-full flex items-center justify-center transform -translate-y-1/2";
@@ -47,7 +51,7 @@ const GuestGuide = ({ onClose }) => {
         )} */}
 
         {/* 가이드 이미지 및 마지막 닫기 페이지 */}
-        {currentStep <= 6 ? (
+        {currentStep <= 10 ? (
           <div className="relative flex items-center justify-center w-full h-full">
             <img
               src={images[currentStep - 1]}
