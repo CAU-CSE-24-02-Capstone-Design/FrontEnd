@@ -16,19 +16,7 @@ const feedbackImage = "/images/record_feedback.png";
 const RecordScript = ({selectedDate}) => {
     const [userAudioUrl, setUserAudioUrl] = useState("");
     const [aiAudioUrl, setAiAudioUrl] = useState("");
-    const [userScript, setUserScript] = useState("행복이란 저에게는, 어(추임새) 작은 순간에서 느껴지는 감정 같아요.\n" +
-        "\n" +
-        "그러니까, 음(추임새) 좋아하는 노래를 들으면서 산책할 때나,\n" +
-        "\n" +
-        "그(추임새), 따뜻한 햇살을 받으면서 커피 한 잔 할 때 있잖아요.\n" +
-        "\n" +
-        "(1.8초) 그리고, 아(추임새) 가족들이랑 저녁 먹으면서 웃을 때도 행복을 느껴요.\n" +
-        "\n" +
-        "어(추임새) 또 제가 뭔가 잘 해냈다고 느낄 때도 있죠.\n" +
-        "\n" +
-        "그러니까 행복은, (1.5초) 대단하거나 특별한 게 아니라,\n" +
-        "\n" +
-        "음, 그냥(추임새) 이런 소소한 순간들에서 찾아오는 것 같아요.");
+    const [userScript, setUserScript] = useState("");
     const [aiScript, setAiScript] = useState("");
     const [feedback, setFeedback] = useState("");
     const [aiResponse, setAiResponse] = useState("");

@@ -71,7 +71,7 @@ const ScriptBox = ({
                     );
                 }
                 // 침묵 시간 처리
-                else if (word.match(/^\(.+?초\),?$/)) {
+                else if (word.match(/^\(\d+(\.\d+)?초\.\.\),?$/)) {
                     const cleanWord = word.replace(",", ""); // 쉼표 제거
                     return (
                         <span key={index} style={{backgroundColor: "lightgreen", padding: "0 2px", marginRight: "4px"}}>
