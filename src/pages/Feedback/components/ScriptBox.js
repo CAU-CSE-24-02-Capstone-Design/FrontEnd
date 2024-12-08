@@ -56,6 +56,43 @@ const ScriptBox = ({
         ));
     };
 
+    const beforeScriptFormatContent = (text) => {
+        const parseContent = (line) => {
+            // 단어 단위로 분리하여 처리
+            const words = line.split(" ");
+            return words.map((word, index) => {
+                // 추임새를 포함한 단어 처리
+                if (word.match(/^[^\s]+?\(추임새\),?$/)) {
+                    const cleanWord = word.replace(",", ""); // 쉼표 제거
+                    return (
+                        <span key={index} style={{backgroundColor: "yellow", padding: "0 2px", marginRight: "4px"}}>
+                        {cleanWord}
+                    </span>
+                    );
+                }
+                // 침묵 시간 처리
+                else if (word.match(/^\(\d+(\.\d+)?초\.\.\),?$/)) {
+                    const cleanWord = word.replace(",", ""); // 쉼표 제거
+                    return (
+                        <span key={index} style={{backgroundColor: "lightgreen", padding: "0 2px", marginRight: "4px"}}>
+                        {cleanWord}
+                    </span>
+                    );
+                }
+                // 일반 단어 처리
+                else {
+                    return <React.Fragment key={index}>{word} </React.Fragment>;
+                }
+            });
+        };
+        return text.split("\n").map((line, index) => (
+            <React.Fragment key={index}>
+                {parseContent(line)}
+                <br/>
+            </React.Fragment>
+        ));
+    };
+
     return (
         <div
             className="relative flex flex-col w-full p-4 transition-all bg-white border rounded-lg shadow cursor-pointer border-grayscale-40 hover:shadow-md"
@@ -123,7 +160,7 @@ const ScriptBox = ({
             {/* 드롭다운 텍스트 */}
             {isOpen && (
                 <div className="mt-3 text-sm text-justify transition-all duration-300 ease-in-out text-grayscale-90">
-                    {title === "AI 피드백" ? formatContent(content) : content}
+                    {title === "AI 피드백" ? formatContent(content) : beforeScriptFormatContent(content)}
                 </div>
             )}
         </div>
